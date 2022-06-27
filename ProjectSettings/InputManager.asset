@@ -13,7 +13,7 @@ InputManager:
     positiveButton: d
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 1
+    gravity: 2
     dead: 0.19
     sensitivity: 1
     snap: 0
@@ -29,7 +29,7 @@ InputManager:
     positiveButton: w
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 1
+    gravity: 2
     dead: 0.19
     sensitivity: 1
     snap: 0
