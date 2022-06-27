@@ -1057,7 +1057,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -4951,7 +4951,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &121627679
 Transform:
   m_ObjectHideFlags: 0
@@ -6387,7 +6387,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -10753,7 +10753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1a15b2bb8dfb1d6479f72ba49d76006f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 63.993996
+      value: 0.80399805
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1a15b2bb8dfb1d6479f72ba49d76006f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10911,7 +10911,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &529765288
 Transform:
   m_ObjectHideFlags: 0
@@ -11923,7 +11923,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -16101,7 +16101,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768468727}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 65.062996, z: 0}
+  m_LocalPosition: {x: 0, y: 1.8729984, z: 0}
   m_LocalScale: {x: 1, y: 1.4489, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17042,7 +17042,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -20966,6 +20966,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -21006,7 +21007,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 83.7
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -21031,14 +21032,30 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: -0, y: -0.70710576, z: -0, w: 0.7071079}
-  m_LocalPosition: {x: 0.009000778, y: 65.933, z: -0.021596909}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.07, y: 2.19, z: -0.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1808983689}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d75fd675f6ef42145b022d78bcc79239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1808983684}
+  cameraHeight: -3.48
+  cameraHeight2: 2.24
+  cameraHeight3: -1.37
 --- !u!1 &963762479
 GameObject:
   m_ObjectHideFlags: 0
@@ -21102,7 +21119,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 974854975}
   m_LocalRotation: {x: -0.70710576, y: -0, z: -0, w: 0.70710784}
-  m_LocalPosition: {x: 0, y: 63.7, z: -0.797}
+  m_LocalPosition: {x: 0, y: 0.51, z: -0.797}
   m_LocalScale: {x: 0.26278827, y: 0.25728336, z: 0.3636}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -22140,7 +22157,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -27067,7 +27084,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -31879,7 +31896,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -36944,7 +36961,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -41041,7 +41058,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1609772837}
   m_LocalRotation: {x: -0.70710576, y: -0, z: -0, w: 0.70710784}
-  m_LocalPosition: {x: 0, y: 63.667995, z: 0.83}
+  m_LocalPosition: {x: 0, y: 0.47799784, z: 0.83}
   m_LocalScale: {x: 0.14897467, y: 0.25619245, z: 0.20612484}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41128,7 +41145,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1672127357
 Transform:
   m_ObjectHideFlags: 0
@@ -41233,7 +41250,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1788905551}
   m_LocalRotation: {x: -0.49999997, y: -0.50000006, z: -0.4999985, w: 0.50000155}
-  m_LocalPosition: {x: 0.79, y: 63.765995, z: 0.053}
+  m_LocalPosition: {x: 0.79, y: 0.5759974, z: 0.053}
   m_LocalScale: {x: 0.13941701, y: 0.2346511, z: 0.19290061}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41370,9 +41387,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInputSpace: {fileID: 963194228}
-  maxSpeed: 23.5
-  maxAcceleration: 9.4
-  maxAirAcceleration: 5.5
+  maxSpeed: 62.1
+  maxAcceleration: 18.9
+  maxAirAcceleration: 10.5
   jumpHeight: 2
   maxAirJumps: 1
   maxGroundAngle: 25
@@ -41395,8 +41412,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1808983684}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.234, y: 21.89, z: 12.341597}
+  m_LocalRotation: {x: -0, y: -0.70710576, z: -0, w: 0.70710784}
+  m_LocalPosition: {x: 587.2, y: 62.747, z: 75.2}
   m_LocalScale: {x: 1, y: 0.71815, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -41409,7 +41426,7 @@ Transform:
   - {fileID: 1976971160}
   m_Father: {fileID: 0}
   m_RootOrder: 17
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &1808983690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42492,7 +42509,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -47434,7 +47451,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -51339,7 +51356,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1976971159}
   m_LocalRotation: {x: -0.49999997, y: -0.50000006, z: -0.4999985, w: 0.50000155}
-  m_LocalPosition: {x: -0.768, y: 63.765995, z: 0.053}
+  m_LocalPosition: {x: -0.768, y: 0.5759974, z: 0.053}
   m_LocalScale: {x: 0.13941701, y: 0.2346511, z: 0.19290061}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -52458,7 +52475,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -56466,7 +56483,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2128587580
 Transform:
   m_ObjectHideFlags: 0
@@ -57478,7 +57495,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
