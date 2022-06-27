@@ -41317,6 +41317,7 @@ GameObject:
   - component: {fileID: 1808983686}
   - component: {fileID: 1808983685}
   - component: {fileID: 1808983690}
+  - component: {fileID: 1808983691}
   m_Layer: 3
   m_Name: GameObject
   m_TagString: Player
@@ -41426,6 +41427,22 @@ MonoBehaviour:
     m_Bits: 2147483647
   distance: 8
   cam: {fileID: 963194228}
+  inventory: {fileID: 1808983691}
+--- !u!114 &1808983691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808983684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c5769971aa0818499e5c66e8b15f15a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventorySize: 0
+  inventorySystem:
+    inventorySlots: []
 --- !u!1 &1831830741
 GameObject:
   m_ObjectHideFlags: 0
@@ -46366,6 +46383,7 @@ GameObject:
   - component: {fileID: 1879541838}
   - component: {fileID: 1879541837}
   - component: {fileID: 1879541836}
+  - component: {fileID: 1879541841}
   m_Layer: 0
   m_Name: Cylinder (2)
   m_TagString: Untagged
@@ -46468,6 +46486,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1879541841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879541835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8748e497d1d4454aafa930295bd9541, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PickupRadius: 1
+  ItemData: {fileID: 11400000, guid: e040670f16d1b4c459ec90b54467c557, type: 2}
 --- !u!1 &1925197988
 GameObject:
   m_ObjectHideFlags: 0
