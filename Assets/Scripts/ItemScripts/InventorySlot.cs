@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-public class InventorySlot
+public class InventorySlot : MonoBehaviour
 {
     [SerializeField] private InventoryItemData itemData;
     [SerializeField] private int stackSize;
