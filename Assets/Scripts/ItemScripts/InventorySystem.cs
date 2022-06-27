@@ -28,7 +28,7 @@ public class InventorySystem
             foreach (var slot in invSlot) {
                 if (slot.RoomLeftInStack(amountToAdd)) {
                     slot.AddToStack(amountToAdd);
-                    OnInventorySlotChanged?.Invoke(invSlot);
+                    OnInventorySlotChanged?.Invoke(slot);
                     return true;
                 }
             }
@@ -45,10 +45,10 @@ public class InventorySystem
     public bool ContainsItem(InventoryItemData itemToAdd, out List<InventorySlot> invSlot) {
         invSlot = InventorySlots.Where(i => i.ItemData == itemToAdd).ToList();
 
-        return invSlot.Count > 1 ? true : false;
+        return invSlot == null ? true : false;
     }
     public bool HasFreeSlot(out InventorySlot freeSlot) {
-        freeSlot = null;
-        return false;
+        freeSlot = InventorySlots.FirstOrDefault(i => i.ItemData == null);
+        return freeSlot == null ? false : true;
     }
 }
