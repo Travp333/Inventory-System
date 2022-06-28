@@ -484,7 +484,7 @@ Material:
     - _CubeMapAnimated: 0
     - _Cull: 0
     - _CullAnimated: 0
-    - _Cutoff: 0.5
+    - _Cutoff: 0.478
     - _CutoffAnimated: 0
     - _DebugCameraData: 0
     - _DebugCameraDataAnimated: 0
@@ -1102,7 +1102,7 @@ Material:
     - _MatcapReplace: 1
     - _MatcapReplaceAnimated: 0
     - _MetalReflectionTintAnimated: 0
-    - _Metallic: 0.439
+    - _Metallic: 0.553
     - _MetallicAnimated: 0
     - _MetallicMaskAnimated: 0
     - _MetallicMaskPanAnimated: 0

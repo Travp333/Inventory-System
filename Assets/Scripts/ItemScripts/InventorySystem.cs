@@ -48,8 +48,8 @@ public class InventorySystem
         return false;
     }
 
-    //this may be causeing issues above, and i dont understand it well enough to go super hard on this. i at least know itemToAdd is being passed properly,
-    //it properly identifies the objects but it seems like it always returns false - trav
+    //this may be causing issues above, and i dont understand it well enough to go super hard on this. i at least know itemToAdd is being passed properly,
+    //it properly identifies the objects but it seems like it always returns false. what is i here? I think learning that might be the key to me being able to troubleshoot - trav
 
     public bool ContainsItem(InventoryItemData itemToAdd, out List<InventorySlot> invSlot) {
         invSlot = InventorySlots.Where(i => i.ItemData == itemToAdd).ToList();

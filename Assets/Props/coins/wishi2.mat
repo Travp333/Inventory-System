@@ -2,18 +2,20 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: wishi2
-  m_Shader: {fileID: 4800000, guid: d19d4ce832042f84f9838687b0b59440, type: 3}
-  m_ShaderKeywords: _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2451
+  m_CustomRenderQueue: 2450
   stringTagMap:
     OptimizedShaderFolder: wishi2-82e13622
     OriginalShader: ".poiyomi/\u2022 Poiyomi Toon \u2022"
@@ -366,6 +368,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - DSGI: 0
     - Instancing: 0
@@ -481,7 +484,7 @@ Material:
     - _CubeMapAnimated: 0
     - _Cull: 0
     - _CullAnimated: 0
-    - _Cutoff: 0
+    - _Cutoff: 0.301
     - _CutoffAnimated: 0
     - _DebugCameraData: 0
     - _DebugCameraDataAnimated: 0
@@ -637,7 +640,7 @@ Material:
     - _DitherGradientAnimated: 0
     - _DitheringEnabled: 0
     - _DitheringEnabledAnimated: 0
-    - _DstBlend: 10
+    - _DstBlend: 0
     - _DstBlendAnimated: 0
     - _EmissionBaseColorAsMap: 0
     - _EmissionBaseColorAsMap1: 0
@@ -892,7 +895,7 @@ Material:
     - _GlitterUseSurfaceColor: 0
     - _GlitterUseSurfaceColorAnimated: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0
+    - _Glossiness: 1
     - _GlossyReflections: 1
     - _GrabBlurDirectionsAnimated: 0
     - _GrabBlurDistanceAnimated: 0
@@ -1099,7 +1102,7 @@ Material:
     - _MatcapReplace: 1
     - _MatcapReplaceAnimated: 0
     - _MetalReflectionTintAnimated: 0
-    - _Metallic: 1
+    - _Metallic: 0.084
     - _MetallicAnimated: 0
     - _MetallicMaskAnimated: 0
     - _MetallicMaskPanAnimated: 0
@@ -1115,7 +1118,7 @@ Material:
     - _MirrorTexturePanAnimated: 0
     - _MirrorTextureUV: 0
     - _MirrorTextureUVAnimated: 0
-    - _Mode: 9
+    - _Mode: 1
     - _ModelAngleMax: 90
     - _ModelAngleMaxAnimated: 0
     - _ModelAngleMin: 45
@@ -1446,7 +1449,7 @@ Material:
     - _SpecularType1: 1
     - _SpecularType1Animated: 0
     - _SpecularTypeAnimated: 0
-    - _SrcBlend: 5
+    - _SrcBlend: 1
     - _SrcBlendAnimated: 0
     - _StencilCompareFunction: 8
     - _StencilCompareFunctionAnimated: 0
