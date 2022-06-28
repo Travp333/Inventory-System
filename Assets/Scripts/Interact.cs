@@ -12,9 +12,6 @@ public class Interact : MonoBehaviour
     RaycastHit hit;
 
     public InventoryHolder inventory;
-
-
-    // Update is called once per frame
     void Update()
     {
         
@@ -23,8 +20,16 @@ public class Interact : MonoBehaviour
                 if(hit.transform.gameObject.GetComponent<ItemPickup>() != null){
                     GameObject g = hit.transform.gameObject;
                     ItemPickup i = g.GetComponent<ItemPickup>();
-                    inventory.InventorySystem.AddToInventory(i.ItemData, 1);
-                    Destroy(g);
+
+                    //I changed this to only destroy the object if the item is actually added to your inventory. also added an error message for when you have no more space. 
+                    //this mostly works - trav
+                    
+                    if(inventory.InventorySystem.AddToInventory(i.ItemData, 1)){
+                        Destroy(g);
+                    }
+                    else{
+                        Debug.Log("inventory full!");
+                    }
 
                 }
             }
