@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7537237444302169425}
   - component: {fileID: 9176137172957373549}
   - component: {fileID: 9176137172957373546}
-  - component: {fileID: 1256856870881821386}
+  - component: {fileID: -5360734150397829406}
   m_Layer: 0
   m_Name: Wishi Coin
   m_TagString: Untagged
@@ -102,7 +102,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!64 &9176137172957373546
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -115,9 +115,9 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 30
+  m_CookingOptions: 0
   m_Mesh: {fileID: -8839927005524816849, guid: 206c9a81d8b65f1479937f43dd76cc6a, type: 3}
---- !u!114 &1256856870881821386
+--- !u!114 &-5360734150397829406
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,11 +126,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8329787897583027332}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8748e497d1d4454aafa930295bd9541, type: 3}
+  m_Script: {fileID: 11500000, guid: 772310826bc0b98418795da99cc607e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickupRadius: 1
-  ItemData: {fileID: 11400000, guid: 67eb70600f1d6a541ace3696d5c7497d, type: 2}
+  item: {fileID: 11400000, guid: b0a5ea9696d5f0a4496ccd1107abcdfc, type: 2}
 --- !u!1001 &9176137172908143749
 PrefabInstance:
   m_ObjectHideFlags: 0

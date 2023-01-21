@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3677784575097991757}
   - component: {fileID: 2651362564204136419}
   - component: {fileID: 2651362564204136420}
-  - component: {fileID: 8113892275522353412}
+  - component: {fileID: 661969277442608237}
   m_Layer: 0
   m_Name: lambCoin
   m_TagString: Untagged
@@ -102,7 +102,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!64 &2651362564204136420
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -115,9 +115,9 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 30
+  m_CookingOptions: 0
   m_Mesh: {fileID: -8839927005524816849, guid: 206c9a81d8b65f1479937f43dd76cc6a, type: 3}
---- !u!114 &8113892275522353412
+--- !u!114 &661969277442608237
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,11 +126,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2885366888732283800}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8748e497d1d4454aafa930295bd9541, type: 3}
+  m_Script: {fileID: 11500000, guid: 772310826bc0b98418795da99cc607e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickupRadius: 1
-  ItemData: {fileID: 11400000, guid: cbb9c0e9745a1e54a9c75c5c4ad8092b, type: 2}
+  item: {fileID: 11400000, guid: 86832b1b7fca1b74885481be3b17000f, type: 2}
 --- !u!1001 &2651362563580040021
 PrefabInstance:
   m_ObjectHideFlags: 0

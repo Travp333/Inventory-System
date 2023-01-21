@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6599476903201696751}
   - component: {fileID: 5501033586121879281}
   - component: {fileID: 5501033586121879283}
-  - component: {fileID: 2194878014280750845}
+  - component: {fileID: 1850237695243799711}
   m_Layer: 0
   m_Name: FreddiCoin
   m_TagString: Untagged
@@ -102,7 +102,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!64 &5501033586121879283
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -115,9 +115,9 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 30
+  m_CookingOptions: 0
   m_Mesh: {fileID: 963281961536220628, guid: f889b7d767f5e7b45a0b1b4be97f5c01, type: 3}
---- !u!114 &2194878014280750845
+--- !u!114 &1850237695243799711
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,11 +126,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4654172483729279546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8748e497d1d4454aafa930295bd9541, type: 3}
+  m_Script: {fileID: 11500000, guid: 772310826bc0b98418795da99cc607e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickupRadius: 1
-  ItemData: {fileID: 11400000, guid: adf946fccb5398d4cac2d4a4869790bf, type: 2}
+  item: {fileID: 11400000, guid: 48480d32a8e06ce40a80f0606fafbe68, type: 2}
 --- !u!1 &5501033586547856156
 GameObject:
   m_ObjectHideFlags: 0

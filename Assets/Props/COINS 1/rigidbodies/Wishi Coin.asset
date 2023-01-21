@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f662b8c77ad7fc439e93b41dd1d875c, type: 3}
+  m_Name: Wishi Coin
+  m_EditorClassIdentifier: 
+  Objname: Wishi Coin
+  weight: 5
+  stackSize: 3
+  img: {fileID: 2800000, guid: 3fbebebb825c83246a7504152ef5977d, type: 3}
+  prefab: {fileID: 8329787897583027332, guid: 8ba86c8dce4dbc64e970b75aff5c4710, type: 3}

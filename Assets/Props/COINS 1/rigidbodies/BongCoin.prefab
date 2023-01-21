@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8669179861604345906}
   - component: {fileID: 8038512497210605414}
   - component: {fileID: 8038512497210605415}
-  - component: {fileID: 6726335299932291725}
+  - component: {fileID: 2872145432965222249}
   m_Layer: 0
   m_Name: BongCoin
   m_TagString: Untagged
@@ -102,7 +102,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!64 &8038512497210605415
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -115,9 +115,9 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 30
+  m_CookingOptions: 0
   m_Mesh: {fileID: -2846169575597210406, guid: 1c0eca2f288515f4e91c69e33d08c1bd, type: 3}
---- !u!114 &6726335299932291725
+--- !u!114 &2872145432965222249
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,11 +126,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7156186097067362791}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8748e497d1d4454aafa930295bd9541, type: 3}
+  m_Script: {fileID: 11500000, guid: 772310826bc0b98418795da99cc607e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickupRadius: 1
-  ItemData: {fileID: 11400000, guid: 04b58a054e6274347854c3e743f96ef1, type: 2}
+  item: {fileID: 11400000, guid: 2bde2e4d80964ea4e8196d2da0b8f31b, type: 2}
 --- !u!1001 &8038512496740694757
 PrefabInstance:
   m_ObjectHideFlags: 0

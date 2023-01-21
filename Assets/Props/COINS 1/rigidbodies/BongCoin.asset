@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f662b8c77ad7fc439e93b41dd1d875c, type: 3}
+  m_Name: BongCoin
+  m_EditorClassIdentifier: 
+  Objname: Evil Bong Coin
+  weight: 0.5
+  stackSize: 5
+  img: {fileID: 2800000, guid: 991318e0fab5e104da8eaff5252c787a, type: 3}
+  prefab: {fileID: 7156186097067362791, guid: df3ba77dfb24dcd4598adfdc7732db9d, type: 3}

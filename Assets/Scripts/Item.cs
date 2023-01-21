@@ -7,10 +7,12 @@ public class Item : ScriptableObject
     [SerializeField]
     public string Objname;
     [SerializeField]
-    public int weight;
+    public float weight;
     [SerializeField]
     public int stackSize;
     [SerializeField]
     public Texture img;
+    [SerializeField]
+    public GameObject prefab;
 
 }
