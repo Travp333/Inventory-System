@@ -11,7 +11,7 @@ public class Item : ScriptableObject
     [SerializeField]
     public int stackSize;
     [SerializeField]
-    public Texture img;
+    public Sprite img;
     [SerializeField]
     public GameObject prefab;
 

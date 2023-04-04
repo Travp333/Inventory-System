@@ -15,5 +15,5 @@ MonoBehaviour:
   Objname: Wishi Coin
   weight: 5
   stackSize: 3
-  img: {fileID: 2800000, guid: 3fbebebb825c83246a7504152ef5977d, type: 3}
+  img: {fileID: 21300000, guid: 3fbebebb825c83246a7504152ef5977d, type: 3}
   prefab: {fileID: 8329787897583027332, guid: 8ba86c8dce4dbc64e970b75aff5c4710, type: 3}

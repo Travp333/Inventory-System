@@ -15,5 +15,5 @@ MonoBehaviour:
   Objname: Da Prototype Coin
   weight: 0.67
   stackSize: 8
-  img: {fileID: 2800000, guid: 4ad0137951f6dd545a752c6f67ffd312, type: 3}
+  img: {fileID: 21300000, guid: 4ad0137951f6dd545a752c6f67ffd312, type: 3}
   prefab: {fileID: 4635547860491899833, guid: 080a10571d1df7245a7ed01d22dd758b, type: 3}

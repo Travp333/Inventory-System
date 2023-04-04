@@ -62,7 +62,7 @@ public class Interact : MonoBehaviour
                     if (hit.transform.gameObject.GetComponent<pickUpableItem>() != null)
                     {
                         item = hit.transform.gameObject.GetComponent<pickUpableItem>().item;
-                        Debug.Log("Hit a pickuppable item --------------------------------------------");
+                        //Debug.Log("Hit a pickuppable item --------------------------------------------");
                         inv.PickUp(item);
                         if (inv.isPickedUp)
                         {
@@ -80,6 +80,7 @@ public class Interact : MonoBehaviour
             }
         }
     }
+    
     void LogInventory() {
         Debug.Log("*********************************");
         Debug.Log("Inventory:");
