@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class ItemStat {
@@ -11,6 +11,8 @@ public class ItemStat {
 }
 public class Inven : MonoBehaviour
 {
+	[SerializeField]
+	Transform coinSpawnSpot;
     [SerializeField]
     GameObject UIPlugger;
     [SerializeField]
@@ -97,6 +99,9 @@ public class Inven : MonoBehaviour
             }
         }
     }
+	public void SpawnCoin(GameObject coin){
+		Instantiate(coin, coinSpawnSpot.position, Quaternion.identity);
+	}
     public void DropItem(){
         //iterating through columns
         for (int i = 0; i < hSize; i++)
@@ -107,7 +112,7 @@ public class Inven : MonoBehaviour
                 if(array[i,i2].Amount > 0){
                     Debug.Log("Dropping one " + array[i,i2].Name + " from slot (" + i + " , "+ i2 + " ) , now we have" + (array[i,i2].Amount - 1));
                     array[i,i2].Amount = array[i,i2].Amount - 1;
-                    Instantiate(array[i,i2].prefab, this.transform.root.transform.position, Quaternion.identity);
+	                SpawnCoin(array[i,i2].prefab);
                     //updating UI to match new change
                     UIPlugger.GetComponent<UiPlugger>().UpdateItem(i, i2, array[i,i2].Amount);
                     if(array[i,i2].Amount <= 0){
@@ -131,8 +136,8 @@ public class Inven : MonoBehaviour
         int column = int.Parse(coords2[1]);
         if(array[row, column].Amount > 0){
             Debug.Log("Dropping one " + array[row, column].Name + " from slot (" + row + " , "+ column + " ) , now we have" + (array[row,column].Amount - 1));
-            array[row, column].Amount = array[row, column].Amount - 1;
-            Instantiate(array[row, column].prefab, this.transform.root.transform.position, Quaternion.identity);
+	        array[row, column].Amount = array[row, column].Amount - 1;
+	        SpawnCoin(array[row, column].prefab);
             //updating UI to match new change
             UIPlugger.GetComponent<UiPlugger>().UpdateItem(row, column, array[row,column].Amount);
             if(array[row, column].Amount <= 0){

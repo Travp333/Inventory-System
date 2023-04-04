@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +33,8 @@ public class Interact : MonoBehaviour
         {
             if (Input.GetKeyDown("tab")) //pressing tab with the inventory open 
             {
-                
+	            Cursor.lockState = CursorLockMode.Locked;
+	            Cursor.visible = false;
                 InventoryUI.SetActive(false); //close inventory
                 camScript.enabled = true;//enable camera movement script
                 invIsOpen = false;
@@ -43,6 +44,8 @@ public class Interact : MonoBehaviour
         {
             if (Input.GetKeyDown("tab"))
             {
+	            Cursor.lockState = CursorLockMode.None;
+	            Cursor.visible = true;
                 InventoryUI.SetActive(true);//open inventory 
                 camScript.enabled = false;//disable camera movement script
                 invIsOpen = true;
