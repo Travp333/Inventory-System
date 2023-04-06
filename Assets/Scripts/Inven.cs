@@ -12,7 +12,7 @@ public class ItemStat {
 public class Inven : MonoBehaviour
 {
 	[SerializeField]
-	Transform coinSpawnSpot;
+	Transform droppedItemSpawnPoint;
     [SerializeField]
     GameObject UIPlugger;
     [SerializeField]
@@ -100,7 +100,7 @@ public class Inven : MonoBehaviour
         }
     }
 	public void SpawnCoin(GameObject coin){
-		Instantiate(coin, coinSpawnSpot.position, Quaternion.identity);
+		Instantiate(coin, droppedItemSpawnPoint.position, Quaternion.identity);
 	}
     public void DropItem(){
         //iterating through columns
@@ -130,15 +130,19 @@ public class Inven : MonoBehaviour
             }
         }
     }
-    public void DropSpecificItem(string coords){
+	public void DropSpecificItem(string coords){
+		
+		Debug.Log(coords);
         string [] coords2 = coords.Split(",");
         int row = int.Parse(coords2[0]);
-        int column = int.Parse(coords2[1]);
+		int column = int.Parse(coords2[1]);
+		Debug.Log(row);
+		Debug.Log(column);
         if(array[row, column].Amount > 0){
             Debug.Log("Dropping one " + array[row, column].Name + " from slot (" + row + " , "+ column + " ) , now we have" + (array[row,column].Amount - 1));
 	        array[row, column].Amount = array[row, column].Amount - 1;
 	        SpawnCoin(array[row, column].prefab);
-            //updating UI to match new change
+	        //updating UI to match new change (could probably do this in an else instead...)
             UIPlugger.GetComponent<UiPlugger>().UpdateItem(row, column, array[row,column].Amount);
             if(array[row, column].Amount <= 0){
                 Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
@@ -150,6 +154,7 @@ public class Inven : MonoBehaviour
                 //updating UI to match new change
                 UIPlugger.GetComponent<UiPlugger>().ClearSlot(row, column);
             }
+            
             return;
         }
 }
