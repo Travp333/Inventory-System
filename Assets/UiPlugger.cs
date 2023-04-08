@@ -47,6 +47,30 @@ public class UiPlugger : MonoBehaviour
         }
         i = 0;
     }
-
+    public void ButtonSelected(int row, int column) {
+        foreach (GameObject g in slots)
+        {
+            if (slots[i].name == row + "," + column)
+            {
+                reff = slots[i].GetComponent<UIReferenceHolder>();
+                reff.button.GetComponent<UnityEngine.UI.Image>().color *= .5f;
+            }
+            i++;
+        }
+        i = 0;
+    }
+    public void ButtonDeselected(int row, int column)
+    {
+        foreach (GameObject g in slots)
+        {
+            if (slots[i].name == row + "," + column)
+            {
+                reff = slots[i].GetComponent<UIReferenceHolder>();
+                reff.button.GetComponent<UnityEngine.UI.Image>().color *= 2f;
+            }
+            i++;
+        }
+        i = 0;
+    }
 
 }

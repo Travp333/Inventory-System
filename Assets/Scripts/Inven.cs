@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 public class ItemStat {
 
-    public string Name = "Empty";
+    public string Name = "";
     public float Weight = 0;
     public int Amount = 0;
     public int StackSize = 0;
     public GameObject prefab = null;
+    public Sprite image = null;
 }
 public class Inven : MonoBehaviour
 {
 	[SerializeField]
 	Transform droppedItemSpawnPoint;
     [SerializeField]
-    GameObject UIPlugger;
+    public GameObject UIPlugger;
     [SerializeField]
     public int hSize = 4;
     [SerializeField]
@@ -33,6 +34,7 @@ public class Inven : MonoBehaviour
             for (int i2 = 0; i2 < vSize; i2++)
             {
                 array[i,i2] = new ItemStat();
+                array[i,i2].image = UIPlugger.GetComponent<UiPlugger>().empty;
             }
         }
         //ItemStat rand;
@@ -60,7 +62,7 @@ public class Inven : MonoBehaviour
             {
                 //Debug.Log("Row" + i2);
                 //is this slot empty?
-                if(array[i,i2].Name == "Empty"){
+                if(array[i,i2].Name == ""){
                     //yes empty, filling slot
                     Debug.Log("Slot (" + i + " , "+ i2 + " ) is empty, putting " + item.Objname + " in slot");
                     isPickedUp = true;
@@ -69,6 +71,7 @@ public class Inven : MonoBehaviour
                     array[i,i2].Amount = array[i,i2].Amount + 1;
                     array[i,i2].StackSize = item.stackSize;
                     array[i,i2].prefab = item.prefab;
+                    array[i, i2].image = item.img;
                     //updating UI to match new change
                     UIPlugger.GetComponent<UiPlugger>().ChangeItem(i, i2, item.img, array[i,i2].Amount, array[i,i2].Name);
                     i=0;
@@ -118,11 +121,12 @@ public class Inven : MonoBehaviour
                     UIPlugger.GetComponent<UiPlugger>().UpdateItem(i, i2, array[i,i2].Amount);
                     if(array[i,i2].Amount <= 0){
                         Debug.Log("Out of " + array[i,i2].Name + " in slot (" + i + " , "+ i2 + " ) , slot now empty ");
-                        array[i,i2].Name = "Empty";
+                        array[i,i2].Name = "";
                         array[i,i2].Weight = 0;
                         array[i,i2].Amount = 0;
                         array[i,i2].StackSize = 0;
                         array[i,i2].prefab = null;
+                        array[i, i2].image = UIPlugger.GetComponent<UiPlugger>().empty;
                         //updating UI to match new change
                         UIPlugger.GetComponent<UiPlugger>().ClearSlot(i, i2);
                     }
@@ -143,11 +147,12 @@ public class Inven : MonoBehaviour
             UIPlugger.GetComponent<UiPlugger>().UpdateItem(row, column, array[row,column].Amount);
             if(array[row, column].Amount <= 0){
                 Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
-                array[row, column].Name = "Empty";
+                array[row, column].Name = "";
                 array[row, column].Weight = 0;
                 array[row, column].Amount = 0;
                 array[row, column].StackSize = 0;
                 array[row, column].prefab = null;
+                array[row, column].image = UIPlugger.GetComponent<UiPlugger>().empty;
                 //updating UI to match new change
                 UIPlugger.GetComponent<UiPlugger>().ClearSlot(row, column);
             }
