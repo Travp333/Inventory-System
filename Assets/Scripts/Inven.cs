@@ -49,6 +49,7 @@ public class Inven : MonoBehaviour
         //Debug.Log(rand.Amount);
         //Debug.Log(rand.StackSize);
     }
+    
     public void PickUp(Item item){
         //iterating through colomns
         for (int i = 0; i < hSize; i++)
@@ -86,7 +87,7 @@ public class Inven : MonoBehaviour
                         array[i,i2].Amount = array[i,i2].Amount + 1;
                         Debug.Log("we now have " + array[i,i2].Amount + " "+ array[i,i2].Name + " in " + "Slot (" + i + " , "+ i2 + " ) ");
                         //updating UI to match new change
-                        UIPlugger.GetComponent<UiPlugger>().ChangeItem(i, i2, item.img, array[i,i2].Amount, array[i,i2].Name);
+                        UIPlugger.GetComponent<UiPlugger>().UpdateItem(i, i2, array[i,i2].Amount);
                         i=0;
                         i2=0;
                         return;
@@ -131,13 +132,9 @@ public class Inven : MonoBehaviour
         }
     }
 	public void DropSpecificItem(string coords){
-		
-		Debug.Log(coords);
         string [] coords2 = coords.Split(",");
         int row = int.Parse(coords2[0]);
 		int column = int.Parse(coords2[1]);
-		Debug.Log(row);
-		Debug.Log(column);
         if(array[row, column].Amount > 0){
             Debug.Log("Dropping one " + array[row, column].Name + " from slot (" + row + " , "+ column + " ) , now we have" + (array[row,column].Amount - 1));
 	        array[row, column].Amount = array[row, column].Amount - 1;
