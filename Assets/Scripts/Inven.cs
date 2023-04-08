@@ -104,7 +104,8 @@ public class Inven : MonoBehaviour
         }
     }
 	public void SpawnCoin(GameObject coin){
-		Instantiate(coin, droppedItemSpawnPoint.position, Quaternion.identity);
+		GameObject b = Instantiate(coin, droppedItemSpawnPoint.position, this.transform.rotation);
+        b.GetComponent<Rigidbody>().velocity = this.gameObject.GetComponent<Rigidbody>().velocity * 2f;
 	}
     public void DropItem(){
         //iterating through columns
