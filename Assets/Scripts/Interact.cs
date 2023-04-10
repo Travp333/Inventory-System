@@ -5,6 +5,7 @@ using UnityEngine;
 //Written by Conor and Travis
 public class Interact : MonoBehaviour
 {
+	tempHolder tempSlot;
     [SerializeField]
     LayerMask mask = default;
     [SerializeField]
@@ -19,7 +20,8 @@ public class Interact : MonoBehaviour
     bool invIsOpen = false;
     //public InventoryHolder inventory;
     void Start()
-    {
+	{
+		tempSlot = this.gameObject.GetComponent<tempHolder>();
         inv = this.gameObject.GetComponent<Inven>();
         camScript = this.gameObject.GetComponent<SimpleCameraMovement>();
         InventoryUI.SetActive(false); //Inventory is off when you start
@@ -31,6 +33,7 @@ public class Interact : MonoBehaviour
         {
             if (Input.GetKeyDown("tab")) //pressing tab with the inventory open 
             {
+            	tempSlot.ClearSlot();
 	            Cursor.lockState = CursorLockMode.Locked;
 	            Cursor.visible = false;
                 InventoryUI.SetActive(false); //close inventory
@@ -42,6 +45,7 @@ public class Interact : MonoBehaviour
         {
             if (Input.GetKeyDown("tab"))
             {
+            	tempSlot.ClearSlot();
 	            Cursor.lockState = CursorLockMode.None;
 	            Cursor.visible = true;
                 InventoryUI.SetActive(true);//open inventory 

@@ -45,7 +45,7 @@ public class Inven : MonoBehaviour
             for (int i2 = 0; i2 < vSize; i2++)
             {
                 array[i,i2] = new ItemStat();
-                array[i,i2].image = plug.empty;
+	            array[i,i2].image = temp.emptyImage;
             }
         }
 	}
@@ -128,9 +128,9 @@ public class Inven : MonoBehaviour
 	                        array[i,i2].Amount = 0;
 	                        array[i,i2].StackSize = 0;
 	                        array[i,i2].prefab = null;
-		                    array[i, i2].image = plug.empty;
+		                    array[i, i2].image = temp.emptyImage;
 	                        //updating UI to match new change
-	                        plug.ClearSlot(i, i2);
+		                    plug.ClearSlot(i, i2, temp.emptyImage);
 	                    }
 	                    return;
 	                }
@@ -163,9 +163,9 @@ public class Inven : MonoBehaviour
 	                array[row, column].Amount = 0;
 	                array[row, column].StackSize = 0;
 	                array[row, column].prefab = null;
-	                array[row, column].image = plug.empty;
+		            array[row, column].image = temp.emptyImage;
 	                //updating UI to match new change
-		            plug.ClearSlot(row, column);
+		            plug.ClearSlot(row, column, temp.emptyImage);
 	            }
 	            else{
 		            //there are still more of that item in the slot, updating UI to match new change

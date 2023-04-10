@@ -6,7 +6,6 @@ using UnityEngine;
 //Written by Travis
 public class PlayerFinder : MonoBehaviour
 {
-	[SerializeField] Inven inven;
 	GameObject player;
 	public void SendDropItem(){
 		player = GameObject.FindGameObjectsWithTag("Player")[0];

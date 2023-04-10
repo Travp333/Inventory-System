@@ -11,7 +11,7 @@ public class UiPlugger : MonoBehaviour
     UIReferenceHolder reff;
     int i = 0;
     [SerializeField]
-    public Sprite empty;
+	//public Sprite empty;
 	//This is used when all of the information about an inventoyr obejct is new
     public void ChangeItem(int row, int column, Sprite img, int count, string name){
         foreach(GameObject g in slots){
@@ -37,11 +37,11 @@ public class UiPlugger : MonoBehaviour
         i = 0;
     }
 	//this is used when clearing all data from a slot
-    public void ClearSlot(int row, int column){
+	public void ClearSlot(int row, int column, Sprite emp){
         foreach(GameObject g in slots){
             if(slots[i].name == row+","+column){
                 reff = slots[i].GetComponent<UIReferenceHolder>();
-                reff.button.GetComponent<UnityEngine.UI.Image>().sprite = empty;
+	            reff.button.GetComponent<UnityEngine.UI.Image>().sprite = emp;
                 reff.text.GetComponent<TextMeshProUGUI>().text = "";
                 reff.count.GetComponent<TextMeshProUGUI>().text = "x0";
             }
@@ -62,11 +62,13 @@ public class UiPlugger : MonoBehaviour
 		 // Code to execute after the delay
 	}
 	//this is to give feedback for when a button has been selected, ie it has been stored in a temp slot preparing for a swap
-    public void ButtonSelected(int row, int column) {
+	public void ButtonSelected(int row, int column) {
+		Debug.Log("Made it into button selected");
         foreach (GameObject g in slots)
         {
             if (slots[i].name == row + "," + column)
             {
+            	Debug.Log("Made it past the for loop");
                 reff = slots[i].GetComponent<UIReferenceHolder>();
                 reff.button.GetComponent<UnityEngine.UI.Image>().color *= .5f;
             }

@@ -13,16 +13,21 @@ public class tempHolder : MonoBehaviour
 	[HideInInspector]
 	public string tempName = null;
 	Sprite tempImage = null;
-	
-
-	private void Awake()
+	public Sprite emptyImage;
+	private void Start()
 	{
-		tempName = null;
+		ClearSlot();
+	}
+	public void ClearSlot(){
+		foreach(UiPlugger i in GameObject.FindObjectsOfType<UiPlugger>()){
+			i.ButtonDeselected(tempRow, tempColumn);
+		}
+		slot = null;
 		tempRow = -1;
 		tempColumn = -1;
 		tempCount = -1;
-		Debug.Log(tempRow + ", " + tempColumn);
-		slot = null;
+		tempName = null;
+		tempImage = emptyImage;
 	}
 	public void Swap(Inven inventoryObject, string coords) {
 		//store a reference to the Ui script, as we will use it often
@@ -44,7 +49,7 @@ public class tempHolder : MonoBehaviour
 				tempName = slot.Name;
 				tempImage = slot.image;
 				tempCount = slot.Amount;
-				//Debug.Log(slot.Name);
+				Debug.Log(slot.Name);
 				//This turns the button pressed darker, to indicate to the player that that inventory slot is being stored in the temp slot
 				plug.ButtonSelected(row, column);			
 			}
@@ -60,12 +65,7 @@ public class tempHolder : MonoBehaviour
 				if(row == tempRow && tempColumn == column){
 					//same name, same slot, same object, do nothing, reset
 					plug.ButtonDeselected(tempRow, tempColumn);
-					slot = null;
-					tempRow = -1;
-					tempColumn = -1;
-					tempCount = -1;
-					tempName = null;
-					tempImage = plug.empty;	
+					ClearSlot();
 				}
 				else{
 					//two different slots, but same name. merge stacks
@@ -74,37 +74,22 @@ public class tempHolder : MonoBehaviour
 						//we cant do that, set the second buttons count to the max and subtract the necessary amount from the furst button's amount
 						inventoryObject.array[tempRow, tempColumn].Amount = ((inventoryObject.array[row, column].Amount + inventoryObject.array[tempRow, tempColumn].Amount) - inventoryObject.array[row, column].StackSize);
 						plug.UpdateItem(tempRow, tempColumn, inventoryObject.array[tempRow, tempColumn].Amount);
-						plug.ButtonDeselected(tempRow, tempColumn);
 						inventoryObject.array[row, column].Amount = inventoryObject.array[row, column].StackSize;
 						plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
-						slot = null;
-						tempRow = -1;
-						tempColumn = -1;
-						tempCount = -1;
-						tempName = null;
-						tempImage = plug.empty;	
+						ClearSlot();
 						
 					}
 					else{
-						Debug.Log("Stacking two stacks of same item type");
+						//Debug.Log("Stacking two stacks of same item type");
 						//we can simply add the temp slot and second button press together
 						//add the items in temp slot to the second pressed button's slot, clear out original button's slot and temp slot
 						inventoryObject.array[row, column].Amount = inventoryObject.array[tempRow, tempColumn].Amount + inventoryObject.array[row, column].Amount;
 						plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
-						
 						inventoryObject.array[tempRow, tempColumn].Name = "";
 						inventoryObject.array[tempRow, tempColumn].Amount = 0;
-						inventoryObject.array[tempRow, tempColumn].image = plug.empty;
-						
-						plug.ChangeItem(tempRow,tempColumn, plug.empty, 0, "");
-						plug.ButtonDeselected(tempRow, tempColumn);
-						// then we reset the tempslot back to its default values
-						slot = null;
-						tempRow = -1;
-						tempColumn = -1;
-						tempCount = -1;
-						tempName = null;
-						tempImage = plug.empty;		
+						inventoryObject.array[tempRow, tempColumn].image = emptyImage;
+						plug.ChangeItem(tempRow,tempColumn, emptyImage, 0, "");
+						ClearSlot();
 					}
 				}
 			}
@@ -118,14 +103,7 @@ public class tempHolder : MonoBehaviour
 				inventoryObject.array[row, column] = slot;
 				//we also have the Ui update
 				plug.ChangeItem(row,column, tempImage, tempCount, tempName);
-				plug.ButtonDeselected(tempRow, tempColumn);
-				// then we reset the tempslot back to its default values
-				slot = null;
-				tempRow = -1;
-				tempColumn = -1;
-				tempCount = -1;
-				tempName = null;
-				tempImage = plug.empty;				
+				ClearSlot();		
 			}
 			
 
