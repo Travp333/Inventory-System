@@ -31,6 +31,7 @@ public class Inven : MonoBehaviour
 	public ItemStat [,] array;
 	UiPlugger plug;
 	tempHolder temp;
+	int loopCounter;
     // Start is called before the first frame update
 
     void Start()
@@ -48,6 +49,39 @@ public class Inven : MonoBehaviour
 	            array[i,i2].image = temp.emptyImage;
             }
         }
+	}
+	public void SmartPickUp(Item item){
+		//iterating through colomns
+		for (int i = 0; i < hSize; i++)
+		{
+			//Debug.Log("Column " + i);
+			//iterating through rows
+			for (int i2 = 0; i2 < vSize; i2++)
+			{
+				if((array[i,i2].Name == item.Objname) && (loopCounter <= (hSize * vSize)) && (array[i,i2].StackSize !>= array[i,i2].Amount + 1)){
+					//found a stack of the existing item in inventory
+					isPickedUp = true;
+					array[i,i2].Amount = array[i,i2].Amount + 1;
+					plug.UpdateItem(i,i2,array[i,i2].Amount);
+					i=0;
+					i2=0;
+					loopCounter = 0;
+					return;
+				}
+				else{
+					//this slot doesnt have the same name or doesnt have space
+					//Debug.Log(loopCounter);
+					loopCounter++;
+					if(loopCounter >= (hSize * vSize)){
+						//Debug.Log("made it to finishLine");
+						//searched whole inventory, nothing shares name, calling normal PickUp()
+						PickUp(item);
+						loopCounter = 0;
+						return;
+					}
+				}
+			}
+		}
 	}
 	//This handles picking up a new valid Inventory Item (THIS NEEDS TO BE MODIFIED TO SEARCH FOR EXISTING STACKS OF SAME OBJECT FIRST)
     public void PickUp(Item item){
@@ -75,7 +109,6 @@ public class Inven : MonoBehaviour
                     i=0;
                     i2=0;
                     return;
-
                 }
                 //no theres something here
                 else{
@@ -140,7 +173,7 @@ public class Inven : MonoBehaviour
     }
 	//this drops a specific item that is found using its exact coordinates
 	public void DropSpecificItem(string coords){
-		Debug.Log(temp.tempRow + ", " +temp.tempColumn);
+		//Debug.Log(temp.tempRow + ", " +temp.tempColumn);
 		string [] coords2 = coords.Split(",");
 		int row = int.Parse(coords2[0]);
 		int column = int.Parse(coords2[1]);

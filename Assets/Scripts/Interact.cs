@@ -68,7 +68,7 @@ public class Interact : MonoBehaviour
                     {
                         item = hit.transform.gameObject.GetComponent<pickUpableItem>().item;
                         //Debug.Log("Hit a pickuppable item --------------------------------------------");
-                        inv.PickUp(item);
+	                    inv.SmartPickUp(item);
                         if (inv.isPickedUp)
                         {
                             Destroy(hit.transform.gameObject);

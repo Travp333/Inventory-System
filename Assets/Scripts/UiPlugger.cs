@@ -63,12 +63,12 @@ public class UiPlugger : MonoBehaviour
 	}
 	//this is to give feedback for when a button has been selected, ie it has been stored in a temp slot preparing for a swap
 	public void ButtonSelected(int row, int column) {
-		Debug.Log("Made it into button selected");
+		//Debug.Log("Made it into button selected");
         foreach (GameObject g in slots)
         {
             if (slots[i].name == row + "," + column)
             {
-            	Debug.Log("Made it past the for loop");
+            	//Debug.Log("Made it past the for loop");
                 reff = slots[i].GetComponent<UIReferenceHolder>();
                 reff.button.GetComponent<UnityEngine.UI.Image>().color *= .5f;
             }

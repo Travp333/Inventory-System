@@ -49,7 +49,7 @@ public class tempHolder : MonoBehaviour
 				tempName = slot.Name;
 				tempImage = slot.image;
 				tempCount = slot.Amount;
-				Debug.Log(slot.Name);
+				//Debug.Log(slot.Name);
 				//This turns the button pressed darker, to indicate to the player that that inventory slot is being stored in the temp slot
 				plug.ButtonSelected(row, column);			
 			}
