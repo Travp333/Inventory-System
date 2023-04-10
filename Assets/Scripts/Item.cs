@@ -1,6 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//This script stores information about Inventory Objects
+//Written by Travis
 [CreateAssetMenu(menuName = "Item")]
 public class Item : ScriptableObject
 {

@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script handles the interaction of the player character with objects in environment, like inventory objects
+//Written by Conor and Travis
 public class Interact : MonoBehaviour
 {
-    
     [SerializeField]
     LayerMask mask = default;
-
     [SerializeField]
     SimpleCameraMovement camScript = null; 
     [SerializeField]
@@ -18,7 +17,6 @@ public class Interact : MonoBehaviour
     Inven inv;
     Item item;
     bool invIsOpen = false;
-
     //public InventoryHolder inventory;
     void Start()
     {
@@ -83,7 +81,7 @@ public class Interact : MonoBehaviour
             }
         }
     }
-    
+	//uneccecary method as we new have an actual UI to represent these changes
     void LogInventory() {
         Debug.Log("*********************************");
         Debug.Log("Inventory:");

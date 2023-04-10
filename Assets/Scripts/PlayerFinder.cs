@@ -1,7 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//This script creates a reference to the player object and calls methods on it. 
+//This was a workaround to allow calling methods with arguments through the unity event system.
+//Written by Travis
 public class PlayerFinder : MonoBehaviour
 {
 	[SerializeField] Inven inven;
