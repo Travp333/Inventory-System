@@ -40,10 +40,10 @@ public class Inven : MonoBehaviour
 		//stores reference to Ui object
 		plug = UIPlugger.GetComponent<UiPlugger>();
 		//This created out 2D array based on the size given in editor
-        array = new ItemStat[hSize,vSize];
-        for (int i = 0; i < hSize; i++)
+		array = new ItemStat[vSize,hSize];
+		for (int i = 0; i < vSize; i++)
         {
-            for (int i2 = 0; i2 < vSize; i2++)
+			for (int i2 = 0; i2 < hSize; i2++)
             {
                 array[i,i2] = new ItemStat();
 	            array[i,i2].image = temp.emptyImage;
@@ -52,11 +52,11 @@ public class Inven : MonoBehaviour
 	}
 	public void SmartPickUp(Item item){
 		//iterating through colomns
-		for (int i = 0; i < hSize; i++)
+		for (int i = 0; i < vSize; i++)
 		{
 			//Debug.Log("Column " + i);
 			//iterating through rows
-			for (int i2 = 0; i2 < vSize; i2++)
+			for (int i2 = 0; i2 < hSize; i2++)
 			{
 				if((array[i,i2].Name == item.Objname) && (loopCounter <= (hSize * vSize)) && (array[i,i2].StackSize !>= array[i,i2].Amount + 1)){
 					//found a stack of the existing item in inventory
@@ -86,11 +86,11 @@ public class Inven : MonoBehaviour
 	//This handles picking up a new valid Inventory Item (THIS NEEDS TO BE MODIFIED TO SEARCH FOR EXISTING STACKS OF SAME OBJECT FIRST)
     public void PickUp(Item item){
         //iterating through colomns
-        for (int i = 0; i < hSize; i++)
+	    for (int i = 0; i < vSize; i++)
         {
             //Debug.Log("Column " + i);
             //iterating through rows
-            for (int i2 = 0; i2 < vSize; i2++)
+		    for (int i2 = 0; i2 < hSize; i2++)
             {
                 //Debug.Log("Row" + i2);
                 //is this slot empty?
@@ -143,10 +143,10 @@ public class Inven : MonoBehaviour
 	public void DropItem(){
 		if(temp.tempName == ""){
 	        //iterating through columns
-	        for (int i = 0; i < hSize; i++)
+			for (int i = 0; i < vSize; i++)
 	        {
 	            //iterating through rows
-	            for (int i2 = 0; i2 < vSize; i2++)
+				for (int i2 = 0; i2 < hSize; i2++)
 	            {
 	                if(array[i,i2].Amount > 0){
 		                //Debug.Log("Dropping one " + array[i,i2].Name + " from slot (" + i + " , "+ i2 + " ) , now we have" + (array[i,i2].Amount - 1));

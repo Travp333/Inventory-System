@@ -90,10 +90,10 @@ public class Interact : MonoBehaviour
         Debug.Log("*********************************");
         Debug.Log("Inventory:");
         //iterating through columns
-        for (int i = 0; i < inv.hSize; i++)
+	    for (int i = 0; i < inv.vSize; i++)
         {
             //iterating through rows
-            for (int i2 = 0; i2 < inv.vSize; i2++)
+		    for (int i2 = 0; i2 < inv.hSize; i2++)
             {
                 if (inv.array[i, i2].Name == "Empty")
                 {

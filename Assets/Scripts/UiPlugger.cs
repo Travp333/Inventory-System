@@ -2,17 +2,63 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+
 //This script ensures the Inventories UI changes alongside the backend. There are various methods here to change the name, image, and count of inventory slots.
 //Written by Conor and Travis
 public class UiPlugger : MonoBehaviour
 {
-    [SerializeField]
-    public GameObject[] slots;
+	[SerializeField]
+	Transform placeHolderButton;
+ 	[SerializeField]
+	Transform canvasBG;
+	[SerializeField]
+	GameObject buttonPrefab;
+	[SerializeField]
+	Inven inven;
+	[SerializeField]
+	public List<GameObject> slots = new List<GameObject>();
+	public List<Vector3> slotsPos = new List<Vector3>();
+	//public GameObject[] slots;
     UIReferenceHolder reff;
     int i = 0;
-    [SerializeField]
-	//public Sprite empty;
-	//This is used when all of the information about an inventoyr obejct is new
+	bool firstSlotSkip;
+	[SerializeField]
+	int hPadding = 100;
+	[SerializeField]
+	int vPadding = 100;
+	void Start(){
+		SpawnButtons();
+	}
+	
+	void SpawnButtons(){
+		//iterating through colomns
+		for (int i = 0; i < inven.vSize; i++)
+		{
+			//Debug.Log("Making Columns!");
+			if(firstSlotSkip){
+				Debug.Log("shifting placeholder down one row and resetting y");
+				placeHolderButton.position = placeHolderButton.position - new Vector3((vPadding * inven.hSize), -hPadding, 0);
+			}
+			//iteraeing through rows
+			for (int i2 = 0; i2 < inven.hSize; i2++)
+			{
+				firstSlotSkip = true;
+				GameObject g = Instantiate(buttonPrefab, this.gameObject.GetComponent<Canvas>().transform);
+				g.transform.position = placeHolderButton.position;
+				placeHolderButton.position = placeHolderButton.position + new Vector3(vPadding, 0, 0);
+				g.transform.SetParent(canvasBG.transform.parent);
+				g.name = (i+","+i2);
+				slots.Add(g);
+				slotsPos.Add(g.transform.position);
+			}
+		}
+		firstSlotSkip = false;
+			
+		Vector3 avg = GetMeanVector(slotsPos);
+		RectTransform rt = canvasBG.gameObject.GetComponent (typeof (RectTransform)) as RectTransform;
+		rt.sizeDelta = new Vector2 (78*(inven.hSize ), 78 * (inven.vSize ));
+		rt.position = avg;
+	}
     public void ChangeItem(int row, int column, Sprite img, int count, string name){
         foreach(GameObject g in slots){
             if(slots[i].name == row+","+column){
@@ -90,5 +136,21 @@ public class UiPlugger : MonoBehaviour
         }
         i = 0;
     }
+	private Vector3 GetMeanVector(List<Vector3> positions)
+	{
+		if(positions.Count == 0)
+		{
+			return Vector3.zero;
+		}
+ 
+		Vector3 meanVector = Vector3.zero;
+ 
+		foreach(Vector3 pos in positions)
+		{
+			meanVector += pos;
+		}
+ 
+		return (meanVector / positions.Count);
+	}
 
 }

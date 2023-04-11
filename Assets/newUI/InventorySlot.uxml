@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/newUI/inventory-slot.uss?fileID=7433441132597879392&amp;guid=5d987296cf2a5234eb4e3293ce19874a&amp;type=3#inventory-slot" />
+    <ui:VisualElement style="height: 700px; width: 700px; align-items: flex-start; justify-content: flex-start; max-width: 700px; max-height: 700px; min-width: 700px; min-height: 700px; position: relative; top: 369px; left: 15px;">
+        <ui:Button text="Button" display-tooltip-when-elided="true" class="inventory-slot" />
+        <ui:Button text="Button" display-tooltip-when-elided="true" class="inventory-slot" />
+        <ui:Button text="Button" display-tooltip-when-elided="true" class="inventory-slot" />
+        <ui:Button text="Button" display-tooltip-when-elided="true" class="inventory-slot" />
+    </ui:VisualElement>
+</ui:UXML>
