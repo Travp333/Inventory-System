@@ -14,7 +14,7 @@ public class UiPlugger : MonoBehaviour
 	[SerializeField]
 	GameObject buttonPrefab;
 	[SerializeField]
-	Inven inven;
+	public Inven inven;
 	[SerializeField]
 	public List<GameObject> slots = new List<GameObject>();
 	public List<Vector3> slotsPos = new List<Vector3>();
@@ -26,14 +26,45 @@ public class UiPlugger : MonoBehaviour
 	int hPadding = 100;
 	[SerializeField]
 	int vPadding = 100;
+	//creates buttons for storage devices
+	public void SpawnButtonsStorage(){
+		//iterating through columns
+		for (int i = 0; i < inven.vSize; i++)
+		{
+			if(firstSlotSkip){		
+				placeHolderButton.position = placeHolderButton.position + new Vector3((vPadding * inven.hSize), hPadding, 0);
+			}
+			//iteraeing through rows
+			for (int i2 = 0; i2 < inven.hSize; i2++)
+			{
+				firstSlotSkip = true;
+				GameObject g = Instantiate(buttonPrefab, this.gameObject.GetComponent<Canvas>().transform);
+				g.transform.position = placeHolderButton.position;
+				placeHolderButton.position = placeHolderButton.position - new Vector3(vPadding, 0, 0);
+				g.transform.SetParent(canvasBG.transform.parent);
+				g.name = (i+","+i2);
+				slots.Add(g);
+				slotsPos.Add(g.transform.position);
+			}
+		}
+		firstSlotSkip = false;
+			
+		Vector3 avg = GetMeanVector(slotsPos);
+		RectTransform rt = canvasBG.gameObject.GetComponent (typeof (RectTransform)) as RectTransform;
+		rt.sizeDelta = new Vector2 (78*(inven.hSize ), 78 * (inven.vSize ));
+		rt.position = avg;
+		//rt.anchorMin = new Vector2(1,0);
+		//rt.anchorMax = new Vector2(0,1);
+		//rt.pivot = new Vector2(.5f, .5f);
+	}
 	
-	public void SpawnButtons(){
+	public void SpawnButtonsPlayer(){
 		//iterating through colomns
 		for (int i = 0; i < inven.vSize; i++)
 		{
 			//Debug.Log("Making Columns!");
 			if(firstSlotSkip){
-				Debug.Log("shifting placeholder down one row and resetting y");
+				//Debug.Log("shifting placeholder down one row and resetting y");
 				placeHolderButton.position = placeHolderButton.position - new Vector3((vPadding * inven.hSize), -hPadding, 0);
 			}
 			//iteraeing through rows
@@ -55,10 +86,15 @@ public class UiPlugger : MonoBehaviour
 		RectTransform rt = canvasBG.gameObject.GetComponent (typeof (RectTransform)) as RectTransform;
 		rt.sizeDelta = new Vector2 (78*(inven.hSize ), 78 * (inven.vSize ));
 		rt.position = avg;
+		//rt.anchorMin = new Vector2(1,0);
+		//rt.anchorMax = new Vector2(0,1);
+		//rt.pivot = new Vector2(.5f, .5f);
 	}
-    public void ChangeItem(int row, int column, Sprite img, int count, string name){
-        foreach(GameObject g in slots){
-            if(slots[i].name == row+","+column){
+	public void ChangeItem(int row, int column, Sprite img, int count, string name){
+		//Debug.Log(slots.Count + this.gameObject.name);
+		foreach(GameObject g in slots){
+			//Debug.Log("Made it to changeItem");
+	        if(slots[i].name == row+","+column){
                 reff = slots[i].GetComponent<UIReferenceHolder>();
                 reff.button.GetComponent<UnityEngine.UI.Image>().sprite = img;
                 reff.text.GetComponent<TextMeshProUGUI>().text = name;
@@ -69,8 +105,9 @@ public class UiPlugger : MonoBehaviour
         i = 0;
     }
 	//this is used when simply changing the amount of an inventory object.
-    public void UpdateItem(int row, int column, int count){
-        foreach(GameObject g in slots){
+	public void UpdateItem(int row, int column, int count){
+		foreach(GameObject g in slots){
+			//Debug.Log("Made it to Update item");
             if(slots[i].name == row+","+column){
                 reff = slots[i].GetComponent<UIReferenceHolder>();
                 reff.count.GetComponent<TextMeshProUGUI>().text = "x"+count;
@@ -105,13 +142,16 @@ public class UiPlugger : MonoBehaviour
 		 // Code to execute after the delay
 	}
 	//this is to give feedback for when a button has been selected, ie it has been stored in a temp slot preparing for a swap
+	
+	//IF YOU SPAM CLICK A BUTTON YOU CAN BREAK THESE METHOD, NEEDS UPDATING 
+	
 	public void ButtonSelected(int row, int column) {
 		//Debug.Log("Made it into button selected");
         foreach (GameObject g in slots)
         {
             if (slots[i].name == row + "," + column)
             {
-            	//Debug.Log("Made it past the for loop");
+            	Debug.Log("Button Selected!");
                 reff = slots[i].GetComponent<UIReferenceHolder>();
                 reff.button.GetComponent<UnityEngine.UI.Image>().color *= .5f;
             }
@@ -126,6 +166,7 @@ public class UiPlugger : MonoBehaviour
         {
             if (slots[i].name == row + "," + column)
             {
+            	Debug.Log("Button Deselected!");
                 reff = slots[i].GetComponent<UIReferenceHolder>();
                 reff.button.GetComponent<UnityEngine.UI.Image>().color *= 2f;
             }

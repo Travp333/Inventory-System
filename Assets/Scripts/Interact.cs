@@ -3,109 +3,143 @@ using System.Collections.Generic;
 using UnityEngine;
 //this script handles the interaction of the player character with objects in environment, like inventory objects
 //Written by Conor and Travis
+
+//BIG TODO
+//close storage inventory if you get too far away from the object
+
 public class Interact : MonoBehaviour
 {
+	//reference to the tempHolder script
 	tempHolder tempSlot;
+	//Mask for the Raycast
     [SerializeField]
-    LayerMask mask = default;
+	LayerMask mask = default;
+	// Reference to the  Camera Controller
     [SerializeField]
-    SimpleCameraMovement camScript = null; 
-    [SerializeField]
-    GameObject InventoryUI = null; //Inventory Canvas
-    public float distance;
-    public Transform cam;
-    RaycastHit hit;
-    Inven inv;
-    Item item;
-    bool invIsOpen = false;
-    //public InventoryHolder inventory;
+	SimpleCameraMovement camScript = null; 
+	//reference to the player UI
+	[SerializeField]
+	GameObject InventoryUI = null; //Inventory Canvas
+	//raycast length;
+	public float distance;
+	//camera position
+	public Transform cam;
+	//raycast hit holder
+	RaycastHit hit;
+	//reference to Inventory Script on Player
+	Inven inv;
+	// holder for inventory Items
+	Item item;
+	//bool to track inventory being open and closed
+	bool invIsOpen = false;
+	//List of every other inven script in the level
+	[SerializeField]
+	public List<GameObject> StorageInvenUI = new List<GameObject>();
+	//tracks if a storage device's inventory is open
+	bool storageInvOpen = false;
     void Start()
 	{
+		//plugging references
 		tempSlot = this.gameObject.GetComponent<tempHolder>();
         inv = this.gameObject.GetComponent<Inven>();
-        camScript = this.gameObject.GetComponent<SimpleCameraMovement>();
-        InventoryUI.SetActive(false); //Inventory is off when you start
-    }
+		camScript = this.gameObject.GetComponent<SimpleCameraMovement>();
+		//disable all Inventory UI
+		HideAllInventories();
+
+	}
+	void HideAllInventories(){
+		//Loop through all the UIPlugger objects in the scene and add them to a list while also disabling them.
+		foreach(UiPlugger g in GameObject.FindObjectsOfType<UiPlugger>()){
+			//avoids adding duplicates
+			if(StorageInvenUI.Contains(g.gameObject.transform.GetChild(0).gameObject)){
+				g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+			}
+			else{
+				StorageInvenUI.Add(g.gameObject.transform.GetChild(0).gameObject);
+				g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+			}
+			
+		}
+	}
+	//open up the player's Inventory
+	void OpenInventory(){
+		//makes sure the temp slot is empty
+		tempSlot.ClearSlot();
+		//puts cursor on screen
+		Cursor.lockState = CursorLockMode.None;
+		//unhides cursor
+		Cursor.visible = true;
+		//enables UI object
+		InventoryUI.SetActive(true);
+		//disable camera movement script
+		camScript.enabled = false;
+		invIsOpen = true;
+	}
+	//closes out the inventory and all open storage inventories, mostly just inverse of above
+	void CloseInventory(){
+		tempSlot.ClearSlot();
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
+		camScript.enabled = true;//enable camera movement script
+		invIsOpen = false;
+		HideAllInventories();
+	}
+	
     void Update()
     {
         //Check Inventory
         if (invIsOpen)
         {
-            if (Input.GetKeyDown("tab")) //pressing tab with the inventory open 
+        	//pressing tab with the inventory open 
+            if (Input.GetKeyDown("tab")) 
             {
-            	tempSlot.ClearSlot();
-	            Cursor.lockState = CursorLockMode.Locked;
-	            Cursor.visible = false;
-                InventoryUI.SetActive(false); //close inventory
-                camScript.enabled = true;//enable camera movement script
-                invIsOpen = false;
+	            CloseInventory();
             }
         }
-        else if (!invIsOpen) //inventory is not open
+        else if (!invIsOpen) 
         {
+        	//inventory is not open
             if (Input.GetKeyDown("tab"))
             {
-            	tempSlot.ClearSlot();
-	            Cursor.lockState = CursorLockMode.None;
-	            Cursor.visible = true;
-                InventoryUI.SetActive(true);//open inventory 
-                camScript.enabled = false;//disable camera movement script
-                invIsOpen = true;
+	            OpenInventory();
             }
 
-
-            //Drop items
-            if (Input.GetKeyDown("x"))
-            {
-                inv.DropItem();
-            }
             //pickup Items
             if (Input.GetKeyDown("e"))
             {
                 if (Physics.SphereCast(cam.position, 1, cam.forward, out hit, distance, mask))
                 {
+                	//hit a pickupable item?
                     if (hit.transform.gameObject.GetComponent<pickUpableItem>() != null)
                     {
-                        item = hit.transform.gameObject.GetComponent<pickUpableItem>().item;
-                        //Debug.Log("Hit a pickuppable item --------------------------------------------");
+                    	//store reference to the hit object
+	                    item = hit.transform.gameObject.GetComponent<pickUpableItem>().item;
+	                    //update UI
 	                    inv.SmartPickUp(item);
+	                    //Checks if the object was successfully picked up
                         if (inv.isPickedUp)
                         {
+                        	//despawn object in the world
                             Destroy(hit.transform.gameObject);
                             inv.isPickedUp = false;
                         }
+	                    //else, pickup failed
                         else
                         {
                             Debug.Log("Inventory full!");
                         }
-
-
+                    }
+	                //if you did not hit a pickupable object, check if you hit a storage device
+                    else if(hit.transform.gameObject.GetComponent<Inven>() != null){
+                    	Inven inv = hit.transform.gameObject.GetComponent<Inven>();
+                    	//enable the relevant UI element
+                    	inv.UIPlugger.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                    	storageInvOpen = true;
+                    	//force open the player's inventory
+                    	OpenInventory();
                     }
                 }
             }
         }
-    }
-	//uneccecary method as we new have an actual UI to represent these changes
-    void LogInventory() {
-        Debug.Log("*********************************");
-        Debug.Log("Inventory:");
-        //iterating through columns
-	    for (int i = 0; i < inv.vSize; i++)
-        {
-            //iterating through rows
-		    for (int i2 = 0; i2 < inv.hSize; i2++)
-            {
-                if (inv.array[i, i2].Name == "Empty")
-                {
-                    Debug.Log("Slot (" + i + " , " + i2 + " ) contains nothing");
-                }
-                else
-                {
-                    Debug.Log("Slot (" + i + " , " + i2 + " ) contains " + inv.array[i, i2].Amount + " " + inv.array[i, i2].Name);
-                }
-
-            }
-        }
-        Debug.Log("****************************************");
     }
 }

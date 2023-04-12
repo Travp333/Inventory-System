@@ -18,6 +18,8 @@ public class ItemStat {
 public class Inven : MonoBehaviour
 {
 	[SerializeField]
+	public GameObject[] startingInven;
+	[SerializeField]
 	Transform droppedItemSpawnPoint;
     [SerializeField]
     public GameObject UIPlugger;
@@ -34,12 +36,12 @@ public class Inven : MonoBehaviour
 	int loopCounter;
     // Start is called before the first frame update
 
-    void Start()
+	public void Start()
 	{
 		temp = FindObjectOfType<tempHolder>();
 		//stores reference to Ui object
-		plug = UIPlugger.GetComponent<UiPlugger>();
-		//This created out 2D array based on the size given in editor
+		
+		//This creates our 2D array based on the size given in editor
 		array = new ItemStat[vSize,hSize];
 		for (int i = 0; i < vSize; i++)
         {
@@ -49,8 +51,17 @@ public class Inven : MonoBehaviour
 	            array[i,i2].image = temp.emptyImage;
             }
         }
+		Invoke("jumpStart", .1f);
+	}
+	public void jumpStart(){
+		plug = UIPlugger.GetComponent<UiPlugger>();
+		foreach( GameObject g in startingInven){
+			SmartPickUp(g.GetComponent<pickUpableItem>().item);
+		}
+		
 	}
 	public void SmartPickUp(Item item){
+		//Debug.Log("Starting "+ this.gameObject.name + " with a " + item.name);
 		//iterating through colomns
 		for (int i = 0; i < vSize; i++)
 		{
@@ -139,38 +150,6 @@ public class Inven : MonoBehaviour
 		GameObject b = Instantiate(item, droppedItemSpawnPoint.position, this.transform.rotation);
         b.GetComponent<Rigidbody>().velocity = this.gameObject.GetComponent<Rigidbody>().velocity * 2f;
 	}
-	//This just drops an item from the top of the stack, more for debug purposes at this point
-	public void DropItem(){
-		if(temp.tempName == ""){
-	        //iterating through columns
-			for (int i = 0; i < vSize; i++)
-	        {
-	            //iterating through rows
-				for (int i2 = 0; i2 < hSize; i2++)
-	            {
-	                if(array[i,i2].Amount > 0){
-		                //Debug.Log("Dropping one " + array[i,i2].Name + " from slot (" + i + " , "+ i2 + " ) , now we have" + (array[i,i2].Amount - 1));
-	                    array[i,i2].Amount = array[i,i2].Amount - 1;
-		                SpawnCoin(array[i,i2].prefab);
-	                    //updating UI to match new change
-	                    plug.UpdateItem(i, i2, array[i,i2].Amount);
-	                    if(array[i,i2].Amount <= 0){
-		                    //Debug.Log("Out of " + array[i,i2].Name + " in slot (" + i + " , "+ i2 + " ) , slot now empty ");
-	                        array[i,i2].Name = "";
-	                        array[i,i2].Weight = 0;
-	                        array[i,i2].Amount = 0;
-	                        array[i,i2].StackSize = 0;
-	                        array[i,i2].prefab = null;
-		                    array[i, i2].image = temp.emptyImage;
-	                        //updating UI to match new change
-		                    plug.ClearSlot(i, i2, temp.emptyImage);
-	                    }
-	                    return;
-	                }
-	            }
-	        }
-		}
-    }
 	//this drops a specific item that is found using its exact coordinates
 	public void DropSpecificItem(string coords){
 		//Debug.Log(temp.tempRow + ", " +temp.tempColumn);
