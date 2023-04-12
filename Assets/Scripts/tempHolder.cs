@@ -17,10 +17,14 @@ public class tempHolder : MonoBehaviour
 	private void Start()
 	{
 		ClearSlot();
+		foreach(UiPlugger i in GameObject.FindObjectsOfType<UiPlugger>()){
+			i.SpawnButtons();
+		}
 	}
 	public void ClearSlot(){
 		foreach(UiPlugger i in GameObject.FindObjectsOfType<UiPlugger>()){
 			i.ButtonDeselected(tempRow, tempColumn);
+			
 		}
 		slot = null;
 		tempRow = -1;

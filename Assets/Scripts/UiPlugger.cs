@@ -26,11 +26,8 @@ public class UiPlugger : MonoBehaviour
 	int hPadding = 100;
 	[SerializeField]
 	int vPadding = 100;
-	void Start(){
-		SpawnButtons();
-	}
 	
-	void SpawnButtons(){
+	public void SpawnButtons(){
 		//iterating through colomns
 		for (int i = 0; i < inven.vSize; i++)
 		{
