@@ -47,18 +47,21 @@ public class Interact : MonoBehaviour
 		HideAllInventories();
 
 	}
-	void HideAllInventories(){
+	public void HideAllInventories(){
 		//Loop through all the UIPlugger objects in the scene and add them to a list while also disabling them.
 		foreach(UiPlugger g in GameObject.FindObjectsOfType<UiPlugger>()){
 			//avoids adding duplicates
-			if(StorageInvenUI.Contains(g.gameObject.transform.GetChild(0).gameObject)){
-				g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+			if(g.gameObject.transform.GetChild(0).gameObject.activeInHierarchy == true){
+				if(StorageInvenUI.Contains(g.gameObject.transform.GetChild(0).gameObject)){
+					Debug.Log("Just hiding UI");
+					g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+				}
+				else{
+					Debug.Log("Hiding Ui and Adding to list");
+					StorageInvenUI.Add(g.gameObject.transform.GetChild(0).gameObject);
+					g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+				}
 			}
-			else{
-				StorageInvenUI.Add(g.gameObject.transform.GetChild(0).gameObject);
-				g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-			}
-			
 		}
 	}
 	//open up the player's Inventory
