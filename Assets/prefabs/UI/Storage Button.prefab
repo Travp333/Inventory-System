@@ -127,6 +127,7 @@ MonoBehaviour:
           m_StringArgument: 0,0
           m_BoolArgument: 0
         m_CallState: 2
+  cooldown: 0.5
 --- !u!114 &475025264604649871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,6 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7191b2155199ba4ca7880bfcaeb366b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storage: {fileID: 0}
 --- !u!1 &5137595416538600720
 GameObject:
   m_ObjectHideFlags: 0

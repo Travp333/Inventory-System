@@ -37,6 +37,11 @@ public class Interact : MonoBehaviour
 	public List<GameObject> StorageInvenUI = new List<GameObject>();
 	//tracks if a storage device's inventory is open
 	bool storageInvOpen = false;
+	bool distanceGate = false;
+	Transform storageObjectPos;
+	[SerializeField]
+	[Tooltip("The distance that the Inventory closes when walking away from an open storage object")]
+	float invRange;
     void Start()
 	{
 		//plugging references
@@ -53,13 +58,32 @@ public class Interact : MonoBehaviour
 			//avoids adding duplicates
 			if(g.gameObject.transform.GetChild(0).gameObject.activeInHierarchy == true){
 				if(StorageInvenUI.Contains(g.gameObject.transform.GetChild(0).gameObject)){
-					Debug.Log("Just hiding UI");
+					//Debug.Log("Just hiding UI");
 					g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
 				}
 				else{
-					Debug.Log("Hiding Ui and Adding to list");
+					//Debug.Log("Hiding Ui and Adding to list");
 					StorageInvenUI.Add(g.gameObject.transform.GetChild(0).gameObject);
 					g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+				}
+			}
+		}
+	}
+	public void HideAllNonPlayerInventories(){
+		//Loop through all the UIPlugger objects in the scene and add them to a list while also disabling them.
+		foreach(UiPlugger g in GameObject.FindObjectsOfType<UiPlugger>()){
+			//avoids adding duplicates
+			if(g.gameObject.tag != "Player"){
+				if(g.gameObject.transform.GetChild(0).gameObject.activeInHierarchy == true){
+					if(StorageInvenUI.Contains(g.gameObject.transform.GetChild(0).gameObject)){
+						Debug.Log("Just hiding UI");
+						g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+					}
+					else{
+						Debug.Log("Hiding Ui and Adding to list");
+						StorageInvenUI.Add(g.gameObject.transform.GetChild(0).gameObject);
+						g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+					}
 				}
 			}
 		}
@@ -77,7 +101,18 @@ public class Interact : MonoBehaviour
 		//disable camera movement script
 		camScript.enabled = false;
 		invIsOpen = true;
+		
 	}
+	void DistanceCheck(){
+		if(Vector3.Distance(this.transform.position, storageObjectPos.position) > invRange){
+			Debug.Log("TOO FAR!!!!!");
+			distanceGate = false;
+			storageObjectPos = null;
+			HideAllNonPlayerInventories();
+			tempSlot.ClearSlot();
+		}
+	}
+	
 	//closes out the inventory and all open storage inventories, mostly just inverse of above
 	void CloseInventory(){
 		tempSlot.ClearSlot();
@@ -140,9 +175,16 @@ public class Interact : MonoBehaviour
                     	storageInvOpen = true;
                     	//force open the player's inventory
                     	OpenInventory();
+                    	//Add distance check here
+                    	storageObjectPos = inv.gameObject.transform;
+                    	distanceGate = true;
+                    	
                     }
                 }
             }
         }
+	    if(distanceGate){
+	    	DistanceCheck();
+	    }
     }
 }

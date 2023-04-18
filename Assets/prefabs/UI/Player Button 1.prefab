@@ -127,6 +127,7 @@ MonoBehaviour:
           m_StringArgument: 0,0
           m_BoolArgument: 0
         m_CallState: 2
+  cooldown: 0.5
 --- !u!114 &5945557985694161406
 MonoBehaviour:
   m_ObjectHideFlags: 0
