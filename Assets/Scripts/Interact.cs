@@ -36,7 +36,7 @@ public class Interact : MonoBehaviour
 	[SerializeField]
 	public List<GameObject> StorageInvenUI = new List<GameObject>();
 	//tracks if a storage device's inventory is open
-	bool storageInvOpen = false;
+	public bool storageInvOpen = false;
 	bool distanceGate = false;
 	Transform storageObjectPos;
 	[SerializeField]

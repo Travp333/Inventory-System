@@ -17,6 +17,7 @@ public class tempHolder : MonoBehaviour
 	Inven tempInven = null;
 	UiPlugger tempPlug;
 	Inven playerInven;
+	Inven openStorageInven;
 	private void Start()
 	{
 		ClearSlot();
@@ -57,6 +58,7 @@ public class tempHolder : MonoBehaviour
 		int column = int.Parse(coords2[1]);
 		// here, slot refers to the temporary slot in which you are holding an item you selected which you want to swap
 		if (slot == null) {
+			//make sure to tie this shift to the input system
 			if(!Input.GetKey(KeyCode.LeftShift)){
 				//find out what inventory slot the coordiantes you were passed points to, and store that data in the temp slot
 				slot = inventoryObject.array[row,column];
@@ -79,34 +81,65 @@ public class tempHolder : MonoBehaviour
 				}
 			}
 			else{
-				for (int i = 0; i < inventoryObject.array[row, column].Amount; i++) {
-					if(inventoryObject.array[row, column].Amount > 0){	
-						//does the player inventory have space for this
-						//if(){
-						Debug.Log("TEST" + i);
-						playerInven.SmartPickUp(inventoryObject.array[row, column]);
-						if(playerInven.isPickedUp){
-							inventoryObject.array[row, column].Amount = inventoryObject.array[row, column].Amount - 1;
-							plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
-							if(inventoryObject.array[row, column].Amount <= 0){
-								Debug.Log("DRY");
-								inventoryObject.array[row, column].Name = "";
-								inventoryObject.array[row, column].Amount = 0;
-								inventoryObject.array[row, column].image = emptyImage;
-								inventoryObject.array[row, column].full = false;
-								plug.ChangeItem(row, column, emptyImage, 0, "");
+				//is it a player's inventory? is a storage object open?
+				if(inventoryObject.gameObject.tag != "Player"){
+					for (int i = 0; i < inventoryObject.array[row, column].Amount; i++) {
+						if(inventoryObject.array[row, column].Amount > 0){	
+							playerInven.SmartPickUp(inventoryObject.array[row, column]);
+							if(playerInven.isPickedUp){
+								inventoryObject.array[row, column].Amount = inventoryObject.array[row, column].Amount - 1;
+								plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
+								if(inventoryObject.array[row, column].Amount <= 0){
+									Debug.Log("DRY");
+									inventoryObject.array[row, column].Name = "";
+									inventoryObject.array[row, column].Amount = 0;
+									inventoryObject.array[row, column].image = emptyImage;
+									inventoryObject.array[row, column].full = false;
+									plug.ChangeItem(row, column, emptyImage, 0, "");
+								}
+								playerInven.isPickedUp = false;
 							}
-							playerInven.isPickedUp = false;
+							else{
+								Debug.Log("Full Inventory");
+							}
+							
 						}
 						else{
-							Debug.Log("Full Inventory");
+							//Debug.Log("Nothing here!");
 						}
-						//}
-					}
-					else{
-						Debug.Log("Nothing here!");
 					}
 				}
+				else{
+					//Shift clicking from player inventory!
+					//get reference to open storage device?
+					if(playerInven.GetComponent<Interact>()!=null){
+						if(playerInven.GetComponent<Interact>().storageInvOpen){
+							foreach(GameObject i in  playerInven.GetComponent<Interact>().StorageInvenUI){
+								if(i.activeInHierarchy && i.transform.parent.gameObject.tag != "Player"){
+									openStorageInven = i.transform.parent.GetComponent<UiPlugger>().inven;
+								}
+							}
+							Debug.Log("Shift clicking in player inventory while looking at a storage device");
+							for (int i = 0; i < inventoryObject.array[row, column].Amount; i++) {		
+								openStorageInven.SmartPickUp(inventoryObject.array[row, column]);
+								if(openStorageInven.isPickedUp){
+									inventoryObject.array[row, column].Amount = inventoryObject.array[row, column].Amount - 1;
+									plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
+									if(inventoryObject.array[row, column].Amount <= 0){
+										//Debug.Log("DRY");
+										inventoryObject.array[row, column].Name = "";
+										inventoryObject.array[row, column].Amount = 0;
+										inventoryObject.array[row, column].image = emptyImage;
+										inventoryObject.array[row, column].full = false;
+										plug.ChangeItem(row, column, emptyImage, 0, "");
+									}
+									playerInven.isPickedUp = false;
+								}
+							}
+						}
+					}
+				}
+				
 			}
 		}
 		else if (slot != null) {
