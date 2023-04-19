@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-//BUG WITH SWAPPING A SLOT WITH ITSELF, GETS DESELECTED TWICE
-
 //This script ensures the Inventories UI changes alongside the backend. There are various methods here to change the name, image, and count of inventory slots.
 //Written by Conor and Travis
 public class UiPlugger : MonoBehaviour
