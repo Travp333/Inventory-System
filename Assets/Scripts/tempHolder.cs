@@ -16,12 +16,14 @@ public class tempHolder : MonoBehaviour
 	public Sprite emptyImage;
 	Inven tempInven = null;
 	UiPlugger tempPlug;
+	Inven playerInven;
 	private void Start()
 	{
 		ClearSlot();
 		foreach(UiPlugger i in GameObject.FindObjectsOfType<UiPlugger>()){
 			if(i.inven.gameObject.tag == "Player"){
 				i.SpawnButtonsPlayer();
+				playerInven = i.inven;
 			}
 			else{
 				i.SpawnButtonsStorage();
@@ -55,25 +57,56 @@ public class tempHolder : MonoBehaviour
 		int column = int.Parse(coords2[1]);
 		// here, slot refers to the temporary slot in which you are holding an item you selected which you want to swap
 		if (slot == null) {
-			//find out whit inventory slot the coordiantes you were passed points to, and store that data in the temp slot
-			slot = inventoryObject.array[row,column];
-			
-			//if that data is named "", we know it is empty, and therefore we do not need to store it in the temp slot. 
-			if(slot.Name != ""){
-				//if the name is anything else, we know it is a valid inventory object, so we store its data in the temp slot as well as info needed for the UI
-				tempRow = row; 
-				tempColumn = column;
-				tempName = slot.Name;
-				tempImage = slot.image;
-				tempCount = slot.Amount;
-				tempInven = inventoryObject;
-				//Debug.Log(slot.Name + " was selected");
-				//This turns the button pressed darker, to indicate to the player that that inventory slot is being stored in the temp slot
-				plug.ButtonSelected(row, column);	
+			if(!Input.GetKey(KeyCode.LeftShift)){
+				//find out what inventory slot the coordiantes you were passed points to, and store that data in the temp slot
+				slot = inventoryObject.array[row,column];
+				//if that data is named "", we know it is empty, and therefore we do not need to store it in the temp slot. 
+				if(slot.Name != ""){
+					//if the name is anything else, we know it is a valid inventory object, so we store its data in the temp slot as well as info needed for the UI
+					tempRow = row; 
+					tempColumn = column;
+					tempName = slot.Name;
+					tempImage = slot.image;
+					tempCount = slot.Amount;
+					tempInven = inventoryObject;
+					//Debug.Log(slot.Name + " was selected");
+					//This turns the button pressed darker, to indicate to the player that that inventory slot is being stored in the temp slot
+					plug.ButtonSelected(row, column);	
+				}
+				else{
+					//if the slot we picked is empty, we dont need to store any info on it and can jsut clear it out
+					slot = null;
+				}
 			}
 			else{
-				//if the slot we picked is empty, we dont need to store any info on it and can jsut clear it out
-				slot = null;
+				for (int i = 0; i < inventoryObject.array[row, column].Amount; i++) {
+					if(inventoryObject.array[row, column].Amount > 0){	
+						//does the player inventory have space for this
+						//if(){
+						Debug.Log("TEST" + i);
+						playerInven.SmartPickUp(inventoryObject.array[row, column]);
+						if(playerInven.isPickedUp){
+							inventoryObject.array[row, column].Amount = inventoryObject.array[row, column].Amount - 1;
+							plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
+							if(inventoryObject.array[row, column].Amount <= 0){
+								Debug.Log("DRY");
+								inventoryObject.array[row, column].Name = "";
+								inventoryObject.array[row, column].Amount = 0;
+								inventoryObject.array[row, column].image = emptyImage;
+								inventoryObject.array[row, column].full = false;
+								plug.ChangeItem(row, column, emptyImage, 0, "");
+							}
+							playerInven.isPickedUp = false;
+						}
+						else{
+							Debug.Log("Full Inventory");
+						}
+						//}
+					}
+					else{
+						Debug.Log("Nothing here!");
+					}
+				}
 			}
 		}
 		else if (slot != null) {
@@ -82,7 +115,7 @@ public class tempHolder : MonoBehaviour
 			if(tempInven.array[tempRow, tempColumn].Name == inventoryObject.array[row, column].Name) {
 				if(row == tempRow && tempColumn == column){
 					//same name, same slot, same object, do nothing, reset
-					plug.ButtonDeselected(row, column);
+					//plug.ButtonDeselected(row, column);
 					ClearSlot();
 				}
 				else{
@@ -123,8 +156,6 @@ public class tempHolder : MonoBehaviour
 				plug.ChangeItem(row,column, tempImage, tempCount, tempName);
 				ClearSlot();		
 			}
-			
-
 		}
 	}
 }

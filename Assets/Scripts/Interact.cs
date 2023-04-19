@@ -124,7 +124,8 @@ public class Interact : MonoBehaviour
 	}
 	
     void Update()
-    {
+	{
+		//Debug.Log(inv.isPickedUp);
         //Check Inventory
         if (invIsOpen)
         {
@@ -159,7 +160,8 @@ public class Interact : MonoBehaviour
                         {
                         	//despawn object in the world
                             Destroy(hit.transform.gameObject);
-                            inv.isPickedUp = false;
+	                        inv.isPickedUp = false;
+	                        //Debug.Log("ispickedup set to "+ inv.isPickedUp);
                         }
 	                    //else, pickup failed
                         else

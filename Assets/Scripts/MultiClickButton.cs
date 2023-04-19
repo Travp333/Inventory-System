@@ -15,6 +15,7 @@
 	 [SerializeField]
 	 [Tooltip("Amount of time the button is Unclickable after being pressed")]	 
 	 float cooldown = 1f;
+	 bool useCooldown;
 	 
 	 void UnBlockLeft(){
 	 	leftClickBlock = false;
@@ -29,30 +30,41 @@
  
 	 public void OnPointerClick(PointerEventData eventData)
 	 {
-		if (eventData.button == PointerEventData.InputButton.Left){
-			if(!leftClickBlock){
-				leftClick.Invoke ();
-				leftClickBlock = true;
-				Invoke("UnBlockLeft", cooldown);
-			}
+		 if (eventData.button == PointerEventData.InputButton.Left){
+			 if(useCooldown){
+				if(!leftClickBlock){
+					leftClick.Invoke();
+					leftClickBlock = true;
+					Invoke("UnBlockLeft", cooldown);
+				}	 	
+			 }
+			 else{
+			 	leftClick.Invoke();
+			 }
 		}
-			 
-		else if (eventData.button == PointerEventData.InputButton.Middle){
-			if(!middleClickBlock){
-				middleClick.Invoke ();
-				middleClickBlock = true;
-				Invoke("UnBlockMiddle", cooldown);
-			}
-			
+		 else if (eventData.button == PointerEventData.InputButton.Middle){
+			 if(useCooldown){
+				if(!middleClickBlock){
+					middleClick.Invoke();
+					middleClickBlock = true;
+					Invoke("UnBlockMiddle", cooldown);
+				}
+			 }
+			 else{
+			 	middleClick.Invoke();
+			 }
 		}
-		
-			 
-		else if (eventData.button == PointerEventData.InputButton.Right){
-			if(!rightClickBlock){
-				rightClick.Invoke ();
-				rightClickBlock = true;
-				Invoke("UnBlockRight", cooldown);
-			}
+		 else if (eventData.button == PointerEventData.InputButton.Right){
+			 if(useCooldown){
+				if(!rightClickBlock){
+					rightClick.Invoke();
+					rightClickBlock = true;
+					Invoke("UnBlockRight", cooldown);
+				}
+			 }
+			 else{
+			 	rightClick.Invoke();
+			 }
 		 }
 	 }
  }

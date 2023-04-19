@@ -154,8 +154,10 @@ public class UiPlugger : MonoBehaviour
             if (slots[i].name == row + "," + column)
             {
             	Debug.Log("Button Selected!");
-                reff = slots[i].GetComponent<UIReferenceHolder>();
-                reff.button.GetComponent<UnityEngine.UI.Image>().color *= .5f;
+	            reff = slots[i].GetComponent<UIReferenceHolder>();
+	            //reff.button.GetComponent<UnityEngine.UI.Image>().color = Color.grey;
+	            //reff.button.GetComponent<UnityEngine.UI.Image>().color = 858585;
+	            reff.button.GetComponent<UnityEngine.UI.Image>().color *= .5f;
             }
             i++;
         }
@@ -169,8 +171,10 @@ public class UiPlugger : MonoBehaviour
             if (slots[i].name == row + "," + column)
             {
             	Debug.Log("Button Deselected!");
-                reff = slots[i].GetComponent<UIReferenceHolder>();
-                reff.button.GetComponent<UnityEngine.UI.Image>().color *= 2f;
+	            reff = slots[i].GetComponent<UIReferenceHolder>();
+	            //reff.button.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+	            //reff.button.GetComponent<UnityEngine.UI.Image>().color = Color.FFFFFF;
+	            reff.button.GetComponent<UnityEngine.UI.Image>().color *= 2f;
             }
             i++;
         }
