@@ -5,6 +5,8 @@ using TMPro;
 
 //This script ensures the Inventories UI changes alongside the backend. There are various methods here to change the name, image, and count of inventory slots.
 //Written by Conor and Travis
+
+//NOTE consider reversing naming scheme to make inventory stack from top again instead, that makes my brain happier
 public class UiPlugger : MonoBehaviour
 {
 	[SerializeField]
@@ -151,10 +153,12 @@ public class UiPlugger : MonoBehaviour
         {
             if (slots[i].name == row + "," + column)
             {
-            	Debug.Log("Button Selected!");
+            	//Debug.Log("Button Selected!");
+            	
+            	//this could probably be switched to just set the color to a set value, like color.grey, but the 
+            	//multiplication is nice to ensure the methods are running the intended amount of times 
+            	
 	            reff = slots[i].GetComponent<UIReferenceHolder>();
-	            //reff.button.GetComponent<UnityEngine.UI.Image>().color = Color.grey;
-	            //reff.button.GetComponent<UnityEngine.UI.Image>().color = 858585;
 	            reff.button.GetComponent<UnityEngine.UI.Image>().color *= .5f;
             }
             i++;
@@ -168,10 +172,8 @@ public class UiPlugger : MonoBehaviour
         {
             if (slots[i].name == row + "," + column)
             {
-            	Debug.Log("Button Deselected!");
+            	//Debug.Log("Button Deselected!");
 	            reff = slots[i].GetComponent<UIReferenceHolder>();
-	            //reff.button.GetComponent<UnityEngine.UI.Image>().color = Color.white;
-	            //reff.button.GetComponent<UnityEngine.UI.Image>().color = Color.FFFFFF;
 	            reff.button.GetComponent<UnityEngine.UI.Image>().color *= 2f;
             }
             i++;

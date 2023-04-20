@@ -3152,6 +3152,7 @@ MonoBehaviour:
   tempCount: -1
   tempName: 
   emptyImage: {fileID: 21300000, guid: 0ace07e77a946b54f9a9677d9188437f, type: 3}
+  slotAmount: 0
 --- !u!114 &570688340 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6636118398642636865, guid: a333bb2d6a6bdb849a456f61e5e4a4ad, type: 3}
@@ -9984,7 +9985,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6636118398642636864, guid: a333bb2d6a6bdb849a456f61e5e4a4ad, type: 3}
       propertyPath: invRange
-      value: 10
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6636118398642636864, guid: a333bb2d6a6bdb849a456f61e5e4a4ad, type: 3}
       propertyPath: InventoryUI

@@ -56,9 +56,91 @@ public class Inven : MonoBehaviour
 	public void jumpStart(){
 		plug = UIPlugger.GetComponent<UiPlugger>();
 		foreach( GameObject g in startingInven){
-			SmartPickUp(g.GetComponent<pickUpableItem>().item);
+			SafeSmartPickUp(g.GetComponent<pickUpableItem>().item);
 		}
 		
+	}
+	//Pickup Variant called by starting inventory that does not trigger the pickedUp Bool
+	public void SafeSmartPickUp(Item item){
+	
+		for (int i = 0; i < vSize; i++)
+		{
+			//Debug.Log("Column " + i);
+			//iterating through rows
+			for (int i2 = 0; i2 < hSize; i2++)
+			{
+				if((array[i,i2].Name == item.Objname) && (loopCounter <= (hSize * vSize)) && (array[i,i2].StackSize !>= array[i,i2].Amount + 1)){
+					//found a stack of the existing item in inventory
+					array[i,i2].Amount = array[i,i2].Amount + 1;
+					plug.UpdateItem(i,i2,array[i,i2].Amount);
+					i=0;
+					i2=0;
+					loopCounter = 0;
+					return;
+				}
+				else{
+					//this slot doesnt have the same name or doesnt have space
+					//Debug.Log(loopCounter);
+					loopCounter++;
+					if(loopCounter >= (hSize * vSize)){
+						//Debug.Log("made it to finishLine");
+						//searched whole inventory, nothing shares name, calling normal PickUp()
+						SafePickUp(item);
+						loopCounter = 0;
+						return;
+					}
+				}
+			}
+		}
+	}
+	//Pickup Variant called by starting inventory that does not trigger the pickedUp Bool
+	public void SafePickUp(Item item){
+		//iterating through colomns
+		for (int i = 0; i < vSize; i++)
+		{
+			//Debug.Log("Column " + i);
+			//iterating through rows
+			for (int i2 = 0; i2 < hSize; i2++)
+			{
+				//Debug.Log("Row" + i2);
+				//is this slot empty?
+				if(array[i,i2].Name == ""){
+					//yes empty, filling slot
+					//Debug.Log("Slot (" + i + " , "+ i2 + " ) is empty, putting " + item.Objname + " in slot");
+					array[i,i2].Name = item.Objname;
+					array[i,i2].Weight = item.weight;
+					array[i,i2].Amount = array[i,i2].Amount + 1;
+					array[i,i2].StackSize = item.stackSize;
+					array[i,i2].prefab = item.prefab;
+					array[i, i2].image = item.img;
+					//updating UI to match new change
+					plug.ChangeItem(i, i2, item.img, array[i,i2].Amount, array[i,i2].Name);
+					i=0;
+					i2=0;
+					return;
+				}
+				//no theres something here
+				else{
+					//Debug.Log("Slot (" + i + " , " + i2 + " ) has " + array[i,i2].Amount + " " + array[i,i2].Name + " in it, checking if it matches the new " + item.Objname);
+					//basically is there room for it, is it the same object
+					if(array[i,i2].Name == item.Objname && array[i,i2].StackSize !>= array[i,i2].Amount + 1){
+						//Debug.Log("Slot (" + i + " , "+ i2 + " ) has room, adding " + item.Objname + " to stack");
+						//same object, room in the stack, adding to stack
+						array[i,i2].Amount = array[i,i2].Amount + 1;
+						//Debug.Log("we now have " + array[i,i2].Amount + " "+ array[i,i2].Name + " in " + "Slot (" + i + " , "+ i2 + " ) ");
+						//updating UI to match new change
+						plug.UpdateItem(i, i2, array[i,i2].Amount);
+						i=0;
+						i2=0;
+						return;
+					}
+					else if(array[i,i2].StackSize <= array[i,i2].Amount + 1){
+						//Debug.Log("cant hold more than " + array[i,i2].Amount + " " + array[i,i2].Name + " in one stack, starting new stack... ");
+					}
+					//otherwise theres something here but its not the same type or theres no room for it
+				}
+			}
+		}
 	}
 	public void SmartPickUp(Item item){
 		//Debug.Log("Starting "+ this.gameObject.name + " with a " + item.name);

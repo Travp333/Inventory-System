@@ -18,9 +18,13 @@ public class tempHolder : MonoBehaviour
 	UiPlugger tempPlug;
 	Inven playerInven;
 	Inven openStorageInven;
+	public int slotAmount;
 	private void Start()
 	{
+		//make sure nothing is in the slot, set all the values to defaults
 		ClearSlot();
+		//find every UI plugger component, and call the proper methods. in the player's case,
+		//we also store a reference to it here since it is static
 		foreach(UiPlugger i in GameObject.FindObjectsOfType<UiPlugger>()){
 			if(i.inven.gameObject.tag == "Player"){
 				i.SpawnButtonsPlayer();
@@ -31,6 +35,7 @@ public class tempHolder : MonoBehaviour
 			}
 		}
 	}
+	//resets values to defaults, ensures the slot is empty.
 	public void ClearSlot(){
 		foreach(UiPlugger i in GameObject.FindObjectsOfType<UiPlugger>()){
 			if(i.inven == tempInven){
@@ -45,10 +50,54 @@ public class tempHolder : MonoBehaviour
 		tempImage = emptyImage;
 		tempInven = null;
 	}
-
+	//this method handles shift clicking a stack to instantly move it either from the player inventory to the storage, or vice versa. 
+	public void ShiftClick(Inven invenObj, Inven otherInven, int row, int column, UiPlugger plug){
+		//store slotAmount into variable to ensure for loop runs proper amount of times,
+		//as the amount will be edited throughout the for loop
+		slotAmount = invenObj.array[row, column].Amount;
+		//for loop to ensure every single item in the stack is moved
+		//Debug.Log("This will run "+ slotAmount + " times");
+		for (int i = 0; i < slotAmount; i++) {
+			//possibly unnecessary since the loop will already run as any times as the amount
+			if(invenObj.array[row, column].Amount > 0){	
+				//calls the smartpickup method on the player inventory, since we know it is on a storage inventory
+				//object. This will call the overload that uses itemstat instead of item. 
+				otherInven.SmartPickUp(invenObj.array[row, column]);
+				//this bool will be checked true in smartpickup if the pickup was successful
+				if(otherInven.isPickedUp){
+					//the pickup was successfull, so reflect that on this side. 
+					invenObj.array[row, column].Amount = invenObj.array[row, column].Amount - 1;
+					//update Ui to match
+					plug.UpdateItem(row, column, invenObj.array[row, column].Amount);
+					//check if that was the last one. if this slot is now empty, we must update that as well
+					if(invenObj.array[row, column].Amount <= 0){
+						invenObj.array[row, column].Name = "";
+						invenObj.array[row, column].Amount = 0;
+						invenObj.array[row, column].image = emptyImage;
+						invenObj.array[row, column].full = false;
+						//update UI
+						plug.ChangeItem(row, column, emptyImage, 0, "");
+					}
+					//set it back to false now that the needed procedures have been done
+					otherInven.isPickedUp = false;
+					//Debug.Log("ispickedup set to "+ otherInven.isPickedUp);
+				}
+				//if ipickedup is false, then the pickup failed, likely due to the inventory being full.
+				//in this case, we do nothing. 
+				else{
+					Debug.Log("Full Inventory");
+				}
+			}
+			else{
+				//Debug.Log("Nothing here!");
+			}
+		}
+	}
+	//this method handles the logic of deciding whether to store somethign into the slot, or to empty the slot into a given inventory slot
 	public void Swap(Inven inventoryObject, string coords) {
 		//store a reference to the Ui script, as we will use it often
 		UiPlugger plug = inventoryObject.UIPlugger.GetComponent<UiPlugger>();
+		//gets reference to uiplugger component on the item stored in the slot, if there is one
 		if(tempInven != null){
 			tempPlug = tempInven.UIPlugger.GetComponent<UiPlugger>();
 		}
@@ -57,8 +106,10 @@ public class tempHolder : MonoBehaviour
 		int row = int.Parse(coords2[0]);
 		int column = int.Parse(coords2[1]);
 		// here, slot refers to the temporary slot in which you are holding an item you selected which you want to swap
+		// if it is null, we know it it empty, therefore we just need to store the clicked item to the slot 
 		if (slot == null) {
-			//make sure to tie this shift to the input system
+			//check if the player is holding shift, behaviour changes in that case
+			//NOTE make sure to tie this shift to the input system
 			if(!Input.GetKey(KeyCode.LeftShift)){
 				//find out what inventory slot the coordiantes you were passed points to, and store that data in the temp slot
 				slot = inventoryObject.array[row,column];
@@ -80,62 +131,31 @@ public class tempHolder : MonoBehaviour
 					slot = null;
 				}
 			}
+			//player was holding shift, do auto transfer of full stack
 			else{
-				//is it a player's inventory? is a storage object open?
+				//is the given inventory object a player inventory?
+				//if no, its a storage inventory
 				if(inventoryObject.gameObject.tag != "Player"){
-					for (int i = 0; i < inventoryObject.array[row, column].Amount; i++) {
-						if(inventoryObject.array[row, column].Amount > 0){	
-							playerInven.SmartPickUp(inventoryObject.array[row, column]);
-							if(playerInven.isPickedUp){
-								inventoryObject.array[row, column].Amount = inventoryObject.array[row, column].Amount - 1;
-								plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
-								if(inventoryObject.array[row, column].Amount <= 0){
-									Debug.Log("DRY");
-									inventoryObject.array[row, column].Name = "";
-									inventoryObject.array[row, column].Amount = 0;
-									inventoryObject.array[row, column].image = emptyImage;
-									inventoryObject.array[row, column].full = false;
-									plug.ChangeItem(row, column, emptyImage, 0, "");
-								}
-								playerInven.isPickedUp = false;
-							}
-							else{
-								Debug.Log("Full Inventory");
-							}
-							
-						}
-						else{
-							//Debug.Log("Nothing here!");
-						}
-					}
+					//Call the shift click method, which handles moving the requested stack of items 
+					ShiftClick(inventoryObject, playerInven, row, column, plug);
 				}
+				//in this case, the player is shift clicking from within their own inventory. We should do the same 
+				//procedure here, just flipped. 
 				else{
-					//Shift clicking from player inventory!
-					//get reference to open storage device?
+					//make sure the player has an interact component(they always will)
 					if(playerInven.GetComponent<Interact>()!=null){
+						//check if the player has a storage inventory open currently. 
 						if(playerInven.GetComponent<Interact>().storageInvOpen){
+							//search through all the storage devices in the scene, and find the one that is enabled. Ideally there is just
+							//one enabled, in which case that is the one the player is currently interacting with
 							foreach(GameObject i in  playerInven.GetComponent<Interact>().StorageInvenUI){
+								//is is enabled? is it a player?
 								if(i.activeInHierarchy && i.transform.parent.gameObject.tag != "Player"){
+									//if it is enabled and is not a player, store a reference
 									openStorageInven = i.transform.parent.GetComponent<UiPlugger>().inven;
 								}
 							}
-							Debug.Log("Shift clicking in player inventory while looking at a storage device");
-							for (int i = 0; i < inventoryObject.array[row, column].Amount; i++) {		
-								openStorageInven.SmartPickUp(inventoryObject.array[row, column]);
-								if(openStorageInven.isPickedUp){
-									inventoryObject.array[row, column].Amount = inventoryObject.array[row, column].Amount - 1;
-									plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
-									if(inventoryObject.array[row, column].Amount <= 0){
-										//Debug.Log("DRY");
-										inventoryObject.array[row, column].Name = "";
-										inventoryObject.array[row, column].Amount = 0;
-										inventoryObject.array[row, column].image = emptyImage;
-										inventoryObject.array[row, column].full = false;
-										plug.ChangeItem(row, column, emptyImage, 0, "");
-									}
-									playerInven.isPickedUp = false;
-								}
-							}
+							ShiftClick(inventoryObject, openStorageInven, row, column, plug);
 						}
 					}
 				}
@@ -148,17 +168,18 @@ public class tempHolder : MonoBehaviour
 			if(tempInven.array[tempRow, tempColumn].Name == inventoryObject.array[row, column].Name) {
 				if(row == tempRow && tempColumn == column){
 					//same name, same slot, same object, do nothing, reset
-					//plug.ButtonDeselected(row, column);
 					ClearSlot();
 				}
 				else{
 					//two different slots, but same name. merge stacks
 					//check if you can just call them and keep it under that item's stack size
 					if((tempInven.array[tempRow, tempColumn].Amount + inventoryObject.array[row, column].Amount) > inventoryObject.array[row, column].StackSize){
-						//we cant do that, set the second buttons count to the max and subtract the necessary amount from the furst button's amount
+						//we cant do that, set the second buttons count to the max and subtract the necessary amount from the first button's amount
 						tempInven.array[tempRow, tempColumn].Amount = ((inventoryObject.array[row, column].Amount + tempInven.array[tempRow, tempColumn].Amount) - inventoryObject.array[row, column].StackSize);
+						//updateUI
 						tempPlug.UpdateItem(tempRow, tempColumn, tempInven.array[tempRow, tempColumn].Amount);
 						inventoryObject.array[row, column].Amount = inventoryObject.array[row, column].StackSize;
+						//update UI
 						plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
 						ClearSlot();
 						

@@ -76,11 +76,11 @@ public class Interact : MonoBehaviour
 			if(g.gameObject.tag != "Player"){
 				if(g.gameObject.transform.GetChild(0).gameObject.activeInHierarchy == true){
 					if(StorageInvenUI.Contains(g.gameObject.transform.GetChild(0).gameObject)){
-						Debug.Log("Just hiding UI");
+						//Debug.Log("Just hiding UI");
 						g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
 					}
 					else{
-						Debug.Log("Hiding Ui and Adding to list");
+						//Debug.Log("Hiding Ui and Adding to list");
 						StorageInvenUI.Add(g.gameObject.transform.GetChild(0).gameObject);
 						g.gameObject.transform.GetChild(0).gameObject.SetActive(false);
 					}
