@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8038512497210605414}
   - component: {fileID: 8038512497210605415}
   - component: {fileID: 2872145432965222249}
+  - component: {fileID: -371059638570752773}
   m_Layer: 0
   m_Name: BongCoin
   m_TagString: Untagged
@@ -130,6 +131,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 2bde2e4d80964ea4e8196d2da0b8f31b, type: 2}
+--- !u!114 &-371059638570752773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7156186097067362791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3bbf081817227a48b377e0cbdc9a369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recyclesInto:
+  - {fileID: 11400000, guid: ea2b4af47586dad4e8e0c8b48b765de4, type: 2}
+  amount: 05000000
 --- !u!1001 &8038512496740694757
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -27,4 +27,7 @@ public class StorageFinder : MonoBehaviour
 			tH.Swap(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
 		}
 	}
+	public void tryRecycle(){
+		
+	}
 }
