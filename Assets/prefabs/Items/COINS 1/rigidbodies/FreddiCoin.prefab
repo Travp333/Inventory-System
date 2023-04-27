@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5501033586121879281}
   - component: {fileID: 5501033586121879283}
   - component: {fileID: 1850237695243799711}
+  - component: {fileID: 3881251171593345199}
   m_Layer: 0
   m_Name: FreddiCoin
   m_TagString: Untagged
@@ -130,6 +131,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 48480d32a8e06ce40a80f0606fafbe68, type: 2}
+--- !u!114 &3881251171593345199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4654172483729279546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3bbf081817227a48b377e0cbdc9a369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recyclesInto:
+  - {fileID: 11400000, guid: ea2b4af47586dad4e8e0c8b48b765de4, type: 2}
+  - {fileID: 11400000, guid: 22fa22618fdafcd43a9f6687d5b01280, type: 2}
+  amount: 0300000005000000
 --- !u!1 &5501033586547856156
 GameObject:
   m_ObjectHideFlags: 0

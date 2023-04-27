@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f662b8c77ad7fc439e93b41dd1d875c, type: 3}
+  m_Name: Metal Coin Dust
+  m_EditorClassIdentifier: 
+  Objname: Metal Dust
+  weight: 0.5
+  stackSize: 99
+  img: {fileID: 21300000, guid: 64a6b57fc9ec36b44b4d218e051f5473, type: 3}
+  prefab: {fileID: 3793240672644604811, guid: ca8ad778a62d9024f9f8c5bfaaa6634f, type: 3}

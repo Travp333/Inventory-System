@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2651362564204136419}
   - component: {fileID: 2651362564204136420}
   - component: {fileID: 661969277442608237}
+  - component: {fileID: -4613051584568347115}
   m_Layer: 0
   m_Name: lambCoin
   m_TagString: Untagged
@@ -130,6 +131,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 86832b1b7fca1b74885481be3b17000f, type: 2}
+--- !u!114 &-4613051584568347115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2885366888732283800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3bbf081817227a48b377e0cbdc9a369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recyclesInto:
+  - {fileID: 11400000, guid: ea2b4af47586dad4e8e0c8b48b765de4, type: 2}
+  - {fileID: 11400000, guid: 0306d2cea29ceea42bac47461729d1ce, type: 2}
+  amount: 0300000005000000
 --- !u!1001 &2651362563580040021
 PrefabInstance:
   m_ObjectHideFlags: 0
