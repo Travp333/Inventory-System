@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8931339555769359595}
   - component: {fileID: 807007480042632518}
   - component: {fileID: 7776662475482790019}
+  - component: {fileID: 1222761269462300343}
   m_Layer: 0
   m_Name: metal scrap
   m_TagString: Untagged
@@ -129,3 +130,18 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: a436fcfdb58a18945b063ad94d3ed483, type: 3}
+--- !u!114 &1222761269462300343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4341422578442836760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3bbf081817227a48b377e0cbdc9a369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recyclesInto:
+  - {fileID: 11400000, guid: 3ccd63b841e319f408ba53e3b6d494d2, type: 2}
+  amount: 02000000

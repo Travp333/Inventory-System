@@ -42,6 +42,9 @@ public class Interact : MonoBehaviour
 	[SerializeField]
 	[Tooltip("The distance that the Inventory closes when walking away from an open storage object")]
 	float invRange;
+	[SerializeField]
+	[Tooltip("How wide the sphere is that is cast from the player when hitting e")]
+	float sphereCastRadius = .5f;
     void Start()
 	{
 		//plugging references
@@ -110,6 +113,7 @@ public class Interact : MonoBehaviour
 			storageObjectPos = null;
 			HideAllNonPlayerInventories();
 			tempSlot.ClearSlot();
+			storageInvOpen = false;
 		}
 	}
 	
@@ -121,6 +125,7 @@ public class Interact : MonoBehaviour
 		camScript.enabled = true;//enable camera movement script
 		invIsOpen = false;
 		HideAllInventories();
+		storageInvOpen = false;
 	}
 	
     void Update()
@@ -146,7 +151,7 @@ public class Interact : MonoBehaviour
             //pickup Items
             if (Input.GetKeyDown("e"))
             {
-                if (Physics.SphereCast(cam.position, 1, cam.forward, out hit, distance, mask))
+                if (Physics.SphereCast(cam.position, sphereCastRadius, cam.forward, out hit, distance, mask))
                 {
                 	//hit a pickupable item?
                     if (hit.transform.gameObject.GetComponent<pickUpableItem>() != null)
@@ -166,21 +171,24 @@ public class Interact : MonoBehaviour
 	                    //else, pickup failed
                         else
                         {
+                        	Destroy(hit.transform.gameObject);
+                        	inv.SpawnItem(item.prefab);
                             Debug.Log("Inventory full!");
                         }
                     }
 	                //if you did not hit a pickupable object, check if you hit a storage device
                     else if(hit.transform.gameObject.GetComponent<Inven>() != null){
-                    	Inven inv = hit.transform.gameObject.GetComponent<Inven>();
-                    	//enable the relevant UI element
-                    	inv.UIPlugger.gameObject.transform.GetChild(0).gameObject.SetActive(true);
-                    	storageInvOpen = true;
-                    	//force open the player's inventory
-                    	OpenInventory();
-                    	//Add distance check here
-                    	storageObjectPos = inv.gameObject.transform;
-                    	distanceGate = true;
-                    	
+                    	if(hit.transform.gameObject.tag != "Player"){
+	                    	Inven inv = hit.transform.gameObject.GetComponent<Inven>();
+	                    	//enable the relevant UI element
+	                    	inv.UIPlugger.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+	                    	storageInvOpen = true;
+	                    	//force open the player's inventory
+	                    	OpenInventory();
+	                    	//Add distance check here
+	                    	storageObjectPos = inv.gameObject.transform;
+	                    	distanceGate = true;
+                    	}
                     }
                 }
             }

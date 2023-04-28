@@ -146,7 +146,7 @@ MonoBehaviour:
   recyclesInto:
   - {fileID: 11400000, guid: ea2b4af47586dad4e8e0c8b48b765de4, type: 2}
   - {fileID: 11400000, guid: e72c3175740635f4ab5faf5c47ec9482, type: 2}
-  amount: 0300000005000000
+  amount: 0100000002000000
 --- !u!1001 &8038512496740694757
 PrefabInstance:
   m_ObjectHideFlags: 0

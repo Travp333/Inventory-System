@@ -7,27 +7,36 @@ using UnityEngine;
 public class StorageFinder : MonoBehaviour
 {
 	public GameObject storage;
+	public Inven storageInven;
 	GameObject player;
+	tempHolder tH;
 	void Start()
 	{
-		storage = this.transform.parent.parent.parent.GetComponent<UiPlugger>().inven.gameObject;
+		player = GameObject.FindGameObjectsWithTag("Player")[0];
+		if(this.transform.parent.parent.parent.GetComponent<UiPlugger>() != null){
+			storage = this.transform.parent.parent.parent.GetComponent<UiPlugger>().inven.gameObject;
+		}
+		if(storage.GetComponent<Inven>() != null){
+			storageInven = storage.GetComponent<Inven>();
+		}
+		if(player.GetComponent<tempHolder>() != null){
+			tH = player.GetComponent<tempHolder>();
+		}
+		
 	}
 	public void SendDropItem(){
-		if(storage.GetComponent<Inven>() != null){
-			storage.GetComponent<Inven>().DropSpecificItem(this.gameObject.transform.parent.name);
-		}
-		
+		storageInven.DropSpecificItem(this.gameObject.transform.parent.name);
 	}
-	public void SendSwap() {
-		player = GameObject.FindGameObjectsWithTag("Player")[0];
-		if (storage.GetComponent<Inven>() != null && player.GetComponent<tempHolder>() != null)
-		{
-			//player.GetComponent<Inven>().DropSpecificItem(this.gameObject.transform.parent.name);
-			tempHolder tH = player.GetComponent<tempHolder>();
-			tH.Swap(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
-		}
+	public void SendDropAllItems(){
+		storageInven.DropWholeStack(this.gameObject.transform.parent.name);
+	}
+	public void SendSwap() {	 
+		tH.Swap(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
 	}
 	public void tryRecycle(){
-		
+		storageInven.RecycleOneItemFromStack(this.gameObject.transform.parent.name);
+	}
+	public void tryRecycleAll(){
+		storageInven.RecycleEntireStack(this.gameObject.transform.parent.name);
 	}
 }

@@ -145,8 +145,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recyclesInto:
   - {fileID: 11400000, guid: ea2b4af47586dad4e8e0c8b48b765de4, type: 2}
-  - {fileID: 11400000, guid: cd7984bf397a4e14c98d3d56e4f67ca7, type: 2}
-  amount: 0300000005000000
+  - {fileID: 11400000, guid: 5216478740dafd24981e7ad1124d0912, type: 2}
+  amount: 0100000002000000
 --- !u!1001 &9176137172908143749
 PrefabInstance:
   m_ObjectHideFlags: 0

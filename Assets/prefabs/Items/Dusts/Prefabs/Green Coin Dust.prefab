@@ -146,4 +146,4 @@ MonoBehaviour:
   recyclesInto:
   - {fileID: 11400000, guid: 3ccd63b841e319f408ba53e3b6d494d2, type: 2}
   - {fileID: 11400000, guid: 98ff6b549230a1f4c8fc53d239f84a93, type: 2}
-  amount: 0100000005000000
+  amount: 0100000002000000

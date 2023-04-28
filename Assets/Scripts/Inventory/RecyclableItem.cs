@@ -10,4 +10,5 @@ public class RecyclableItem : MonoBehaviour
 	[SerializeField]
 	[Tooltip("How many of that item is created (Match the order with above, ie recyclesInto[0] will pull from amount[0])")]
 	public int[] amount;
+	
 }
