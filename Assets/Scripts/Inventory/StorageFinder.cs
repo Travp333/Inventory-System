@@ -33,6 +33,12 @@ public class StorageFinder : MonoBehaviour
 	public void SendSwap() {	 
 		tH.Swap(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
 	}
+	public void SendPickUp(){
+		tH.HoldItem(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
+	}
+	public void SendReleaseItem(){
+		tH.DropItem(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
+	}
 	public void tryRecycle(){
 		storageInven.RecycleOneItemFromStack(this.gameObject.transform.parent.name);
 	}

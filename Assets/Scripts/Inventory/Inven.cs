@@ -71,7 +71,7 @@ public class Inven : MonoBehaviour
 					isPickedUp = false;
 				}
 				else{
-					Debug.Log("No room in invnetory, dropping on floor");
+					//Debug.Log("No room in inventory, dropping on floor");
 					SpawnItem(g.GetComponent<pickUpableItem>().item.prefab);
 				}
 			}

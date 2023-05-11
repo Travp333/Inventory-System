@@ -16,4 +16,4 @@ MonoBehaviour:
   weight: 0.1
   stackSize: 99
   img: {fileID: 21300000, guid: 60eb39ad5196d4a44989784ac0d05af9, type: 3}
-  prefab: {fileID: 2081127686728037252, guid: 20c8e6d677dc9ac448f2d9e6986ed932, type: 3}
+  prefab: {fileID: 8757106585874084110, guid: a924167223ba32e4f8473553a2bca8e1, type: 3}

@@ -212,4 +212,140 @@ public class tempHolder : MonoBehaviour
 			}
 		}
 	}
+	//The first half of swap, in its own method. This should allow me to do a click and drag instead of a click and click
+	public void HoldItem(Inven inventoryObject, string coords){
+		//store a reference to the Ui script, as we will use it often
+		UiPlugger plug = inventoryObject.UIPlugger.GetComponent<UiPlugger>();
+		//gets reference to uiplugger component on the item stored in the slot, if there is one
+		if(tempInven != null){
+			tempPlug = tempInven.UIPlugger.GetComponent<UiPlugger>();
+		}
+		//parse the string into two ints, the string will be coordinates, structured like (1,2), which will then be parsed into 1 and 2. 
+		string[] coords2 = coords.Split(",");
+		int row = int.Parse(coords2[0]);
+		int column = int.Parse(coords2[1]);
+		// here, slot refers to the temporary slot in which you are holding an item you selected which you want to swap
+		// if it is null, we know it it empty, therefore we just need to store the clicked item to the slot 
+		if (slot == null) {
+			//check if the player is holding shift, behaviour changes in that case
+			//NOTE make sure to tie this shift to the input system
+			if(!Input.GetKey(KeyCode.LeftShift)){
+				//find out what inventory slot the coordiantes you were passed points to, and store that data in the temp slot
+				slot = inventoryObject.array[row,column];
+				//if that data is named "", we know it is empty, and therefore we do not need to store it in the temp slot. 
+				if(slot.Name != ""){
+					//if the name is anything else, we know it is a valid inventory object, so we store its data in the temp slot as well as info needed for the UI
+					tempRow = row; 
+					tempColumn = column;
+					tempName = slot.Name;
+					tempImage = slot.image;
+					tempCount = slot.Amount;
+					tempInven = inventoryObject;
+					//Debug.Log(slot.Name + " was selected");
+					//This turns the button pressed darker, to indicate to the player that that inventory slot is being stored in the temp slot
+					//plug.ButtonSelected(row, column);	
+				}
+				else{
+					//if the slot we picked is empty, we dont need to store any info on it and can jsut clear it out
+					slot = null;
+				}
+			}
+			//player was holding shift, do auto transfer of full stack
+			else{
+				//is the given inventory object a player inventory?
+				//if no, its a storage inventory
+				if(inventoryObject.gameObject.tag != "Player"){
+					//Call the shift click method, which handles moving the requested stack of items 
+					ShiftClick(inventoryObject, playerInven, row, column, plug);
+				}
+				//in this case, the player is shift clicking from within their own inventory. We should do the same 
+				//procedure here, just flipped. 
+				else{
+					//make sure the player has an interact component(they always will)
+					if(playerInven.GetComponent<Interact>()!=null){
+						//check if the player has a storage inventory open currently. 
+						if(playerInven.GetComponent<Interact>().storageInvOpen){
+							//search through all the storage devices in the scene, and find the one that is enabled. Ideally there is just
+							//one enabled, in which case that is the one the player is currently interacting with
+							foreach(GameObject i in  playerInven.GetComponent<Interact>().StorageInvenUI){
+								//is is enabled? is it a player?
+								if(i.activeInHierarchy && i.transform.parent.gameObject.tag != "Player"){
+									//if it is enabled and is not a player, store a reference
+									openStorageInven = i.transform.parent.GetComponent<UiPlugger>().inven;
+								}
+							}
+							ShiftClick(inventoryObject, openStorageInven, row, column, plug);
+						}
+					}
+				}
+				
+			}
+		}
+	}
+	//second half of Swap
+	public void DropItem(Inven inventoryObject, string coords){
+		
+		//store a reference to the Ui script, as we will use it often
+		UiPlugger plug = inventoryObject.UIPlugger.GetComponent<UiPlugger>();
+		//gets reference to uiplugger component on the item stored in the slot, if there is one
+		if(tempInven != null){
+			tempPlug = tempInven.UIPlugger.GetComponent<UiPlugger>();
+		}
+		//parse the string into two ints, the string will be coordinates, structured like (1,2), which will then be parsed into 1 and 2. 
+		string[] coords2 = coords.Split(",");
+		int row = int.Parse(coords2[0]);
+		int column = int.Parse(coords2[1]);
+		// here, slot refers to the temporary slot in which you are holding an item you selected which you want to swap
+		// if it is null, we know it it empty, therefore we just need to store the clicked item to the slot 
+		
+		if (slot != null) {
+			//if the temp slot is not null, we know it is holding a valid inventory object. So, we must initiate the swap
+			//if we are swapping two objects with the same name, prepare to stack!
+			if(tempInven.array[tempRow, tempColumn].Name == inventoryObject.array[row, column].Name) {
+				if(row == tempRow && tempColumn == column){
+					//same name, same slot, same object, do nothing, reset
+					ClearSlot();
+				}
+				else{
+					//two different slots, but same name. merge stacks
+					//check if you can just call them and keep it under that item's stack size
+					if((tempInven.array[tempRow, tempColumn].Amount + inventoryObject.array[row, column].Amount) > inventoryObject.array[row, column].StackSize){
+						//we cant do that, set the second buttons count to the max and subtract the necessary amount from the first button's amount
+						tempInven.array[tempRow, tempColumn].Amount = ((inventoryObject.array[row, column].Amount + tempInven.array[tempRow, tempColumn].Amount) - inventoryObject.array[row, column].StackSize);
+						//updateUI
+						tempPlug.UpdateItem(tempRow, tempColumn, tempInven.array[tempRow, tempColumn].Amount);
+						inventoryObject.array[row, column].Amount = inventoryObject.array[row, column].StackSize;
+						//update UI
+						plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
+						ClearSlot();
+						
+					}
+					else{
+						//Debug.Log("Stacking two stacks of same item type");
+						//we can simply add the temp slot and second button press together
+						//add the items in temp slot to the second pressed button's slot, clear out original button's slot and temp slot
+						inventoryObject.array[row, column].Amount = tempInven.array[tempRow, tempColumn].Amount + inventoryObject.array[row, column].Amount;
+						plug.UpdateItem(row, column, inventoryObject.array[row, column].Amount);
+						tempInven.array[tempRow, tempColumn].Name = "";
+						tempInven.array[tempRow, tempColumn].Amount = 0;
+						tempInven.array[tempRow, tempColumn].image = emptyImage;
+						tempPlug.ChangeItem(tempRow,tempColumn, emptyImage, 0, "");
+						ClearSlot();
+					}
+				}
+			}
+			else{
+				//clean swap, two different objects
+				//we find the inventory slot the tempslot object is pointing to, and set it equal to the second button's data
+				tempInven.array[tempRow, tempColumn] = inventoryObject.array[row, column];
+				//we then update the Ui to follow suit
+				tempPlug.ChangeItem(tempRow, tempColumn, inventoryObject.array[row, column].image, inventoryObject.array[row, column].Amount, inventoryObject.array[row, column].Name);
+				//then we set the second button equal to the temp slot's data
+				inventoryObject.array[row, column] = slot;
+				//we also have the Ui update
+				plug.ChangeItem(row,column, tempImage, tempCount, tempName);
+				ClearSlot();		
+			}
+		}
+	}
 }
