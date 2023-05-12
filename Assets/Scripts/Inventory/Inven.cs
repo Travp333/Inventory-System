@@ -306,40 +306,41 @@ public class Inven : MonoBehaviour
 		}
 	}
 	public void DropWholeStack(string coords){
+		//Debug.Log("Made it to inventory with coords "+ coords);
+		
 		//Debug.Log(temp.tempRow + ", " +temp.tempColumn);
 		string [] coords2 = coords.Split(",");
 		int row = int.Parse(coords2[0]);
 		int column = int.Parse(coords2[1]);
-		if(!((temp.tempRow == row)&&(temp.tempColumn == column))){
-			//parsing incoming string into ints
-			//This slot does in fact have an object in it
-			if(array[row, column].Amount > 0){
-				//make the button flash grey for a second to give feedback
-				plug.ButtonPress(row, column);
-				//spawn a prefab with the same info as that item
-				for (int i = 0; i < array[row, column].Amount; i++) {
-					SpawnItem(array[row, column].prefab);
-				}
-				array[row, column].Amount = 0;
-				//you just dropped the last item in that slot, reverting to default
-				if(array[row, column].Amount <= 0){
-					//Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
-					array[row, column].Name = "";
-					array[row, column].Weight = 0;
-					array[row, column].Amount = 0;
-					array[row, column].StackSize = 0;
-					array[row, column].prefab = null;
-					array[row, column].image = temp.emptyImage;
-					//updating UI to match new change
-					plug.ClearSlot(row, column, temp.emptyImage);
-				}
-				else{
-					//there are still more of that item in the slot, updating UI to match new change
-					plug.UpdateItem(row, column, array[row,column].Amount);
-				}
-				return;
+		//parsing incoming string into ints
+		//This slot does in fact have an object in it
+		if(array[row, column].Amount > 0){
+			//make the button flash grey for a second to give feedback
+			plug.ButtonPress(row, column);
+			//spawn a prefab with the same info as that item
+			for (int i = 0; i < array[row, column].Amount; i++) {
+				SpawnItem(array[row, column].prefab);
 			}
+			array[row, column].Amount = 0;
+			//you just dropped the last item in that slot, reverting to default
+			if(array[row, column].Amount <= 0){
+				//Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
+				array[row, column].Name = "";
+				array[row, column].Weight = 0;
+				array[row, column].Amount = 0;
+				array[row, column].StackSize = 0;
+				array[row, column].prefab = null;
+				array[row, column].image = temp.emptyImage;
+				//updating UI to match new change
+				plug.ClearSlot(row, column, temp.emptyImage);
+			}
+			else{
+				//there are still more of that item in the slot, updating UI to match new change
+				plug.UpdateItem(row, column, array[row,column].Amount);
+			}
+			return;
 		}
+		
 	}
 
 	public void RecycleOneItemFromStack(string coords){
@@ -411,7 +412,7 @@ public class Inven : MonoBehaviour
 					//This slot does in fact have an object in it
 					//make the button flash grey for a second to give feedback
 					plug.ButtonPress(row, column);
-					Debug.Log("Recycling all " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , now we have 0 ");
+					//Debug.Log("Recycling all " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , now we have 0 ");
 					//deduct one of the items from the stack
 					
 					//--------------------------------------------------------------------
@@ -428,7 +429,7 @@ public class Inven : MonoBehaviour
 									isPickedUp = false;
 								}
 								else{
-									Debug.Log("No room in inventory, dropping on floor");
+									//Debug.Log("No room in inventory, dropping on floor");
 									SpawnItem(recyclableItem.recyclesInto[i3].prefab);
 								}
 							}

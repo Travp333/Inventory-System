@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4353276008651055479}
   - component: {fileID: 4353276008651055478}
   - component: {fileID: 4353276008651055474}
+  - component: {fileID: 8479812746902769279}
   m_Layer: 3
   m_Name: Player Inventory
   m_TagString: Player
@@ -123,6 +124,18 @@ MonoBehaviour:
   slotsPos: []
   hPadding: 100
   vPadding: 100
+--- !u!114 &8479812746902769279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4353276008651055477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e044f8ac282cb24ca4afe2542503bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4353276009733245878
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,7 +223,7 @@ GameObject:
   - component: {fileID: 4353276010095314652}
   - component: {fileID: 6520062110087169541}
   m_Layer: 3
-  m_Name: GameObject
+  m_Name: Inven UI Backdrop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

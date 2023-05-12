@@ -9,10 +9,15 @@ public class StorageFinder : MonoBehaviour
 	public GameObject storage;
 	public Inven storageInven;
 	GameObject player;
+	
 	tempHolder tH;
 	void Start()
 	{
-		player = GameObject.FindGameObjectsWithTag("Player")[0];
+		foreach (GameObject g in GameObject.FindGameObjectsWithTag("Player")){
+			if(g.GetComponent<tempHolder>() != null){
+				player = g;
+			}
+		}
 		if(this.transform.parent.parent.parent.GetComponent<UiPlugger>() != null){
 			storage = this.transform.parent.parent.parent.GetComponent<UiPlugger>().inven.gameObject;
 		}
@@ -28,15 +33,18 @@ public class StorageFinder : MonoBehaviour
 		storageInven.DropSpecificItem(this.gameObject.transform.parent.name);
 	}
 	public void SendDropAllItems(){
+		//Debug.Log("MAde it to storage finder");
 		storageInven.DropWholeStack(this.gameObject.transform.parent.name);
+		tH.ClearSlot();
 	}
-	public void SendSwap() {	 
-		tH.Swap(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
-	}
+	//public void SendSwap() {	 
+		//	tH.Swap(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
+		//}
 	public void SendPickUp(){
 		tH.HoldItem(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
 	}
 	public void SendReleaseItem(){
+		//Debug.Log("Made it to release Item in storage Finder");
 		tH.DropItem(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
 	}
 	public void tryRecycle(){
@@ -44,5 +52,9 @@ public class StorageFinder : MonoBehaviour
 	}
 	public void tryRecycleAll(){
 		storageInven.RecycleEntireStack(this.gameObject.transform.parent.name);
+	}
+	public void TryShiftClickCheck(){
+		//Debug.Log("Shift click check #1");
+		tH.ShiftClickCheck(storage.GetComponent<Inven>(), this.gameObject.transform.parent.name);
 	}
 }

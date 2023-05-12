@@ -15,6 +15,7 @@ using UnityEngine.UI;
 public class MultiClickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler {
  
 	public UnityEvent leftDown;
+	public UnityEvent leftClick;
 	public UnityEvent middleClick;
 	public UnityEvent rightClick;
 	public UnityEvent rightHold;
@@ -32,8 +33,12 @@ public class MultiClickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 	private CanvasGroup canvasGroup;
 	private Canvas canvas;
 	private Vector3 startingPos;
+	private bool leftBlock;
+	private string heldItemName;
+	
 	
 	private void Awake()
+	
 	{
 		
 		rectTransform = GetComponent<RectTransform>();
@@ -44,6 +49,11 @@ public class MultiClickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 	public void OnBeginDrag(PointerEventData eventData){
 		//if object isnt an empty slot
 		if(GetComponent<Image>().sprite.name != "empty"){
+			
+			GetComponent<StorageFinder>().storage.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>().sortingOrder = 999;
+			
+			
+			heldItemName = GetComponent<Image>().sprite.name;
 			startingPos = this.transform.position;
 			this.transform.parent.transform.SetSiblingIndex(this.transform.parent.transform.parent.transform.childCount);
 			canvas = this.gameObject.GetComponent<StorageFinder>().storageInven.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>();
@@ -54,24 +64,30 @@ public class MultiClickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 		}
 	}
 	public void OnDrag(PointerEventData eventData){
+		GetComponent<StorageFinder>().storage.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>().sortingOrder = 999;
 		if(GetComponent<Image>().sprite.name != "empty"){
 			//Debug.Log("On Drag");
 			rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
 		}
 	}
 	public void OnEndDrag(PointerEventData eventData){
-		//Debug.Log("End Drag");
+		GetComponent<StorageFinder>().storage.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>().sortingOrder = 0;
+		//Debug.Log("End Drag on "+ heldItemName);
+		heldItemName = null;
 		canvasGroup.alpha = 1f;
 		canvasGroup.blocksRaycasts = true;
-		if(eventData != null){
-			this.transform.position = startingPos;
-		}
+		//if(eventData != null){
+			//	this.transform.position = startingPos;
+			//}
+		
 	}
 	public void OnDrop(PointerEventData eventData){
-		//Debug.Log("End Drop on " + this.transform.parent.name);
+		GetComponent<StorageFinder>().storage.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>().sortingOrder = 0;
+		//Debug.Log("End Drop on " + this.transform.parent.name + " and " + heldItemName);
 		canvasGroup.alpha = 1f;
 		canvasGroup.blocksRaycasts = true;
 		leftRelease.Invoke();
+		heldItemName = null;
 		if(eventData != null){
 			eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
 		}
@@ -80,10 +96,31 @@ public class MultiClickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 		}
 	}
 	
+	public void resetPosition(){
+		if(startingPos != null){
+			GetComponent<StorageFinder>().storage.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>().sortingOrder = 0;
+			this.transform.position = startingPos;
+			canvasGroup.alpha = 1f;
+			canvasGroup.blocksRaycasts = true;
+			Reset();
+		}
+	}
+	public void quickDropAll(){
+		//Debug.Log("Made it into multiclickbutton");
+		rightHold.Invoke();
+		Reset();
+		
+	}
+	
 	public void Update(){
 		//Mouse button is being held down
 		if(pointerDown){
-
+			if(eventData2.button == PointerEventData.InputButton.Left){
+				if(!leftBlock){
+					leftClick.Invoke();
+					leftBlock = true;
+				}
+			}
 			//increment timer while mouse button besided left click is held down
 			if(eventData2.button != PointerEventData.InputButton.Left){
 				pointerDownTimer += Time.deltaTime;
@@ -123,6 +160,7 @@ public class MultiClickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 	}
 	//called when releasing mouse button 
 	public void OnPointerUp(PointerEventData eventData){
+		leftBlock = false;
 		//check to be sure the event exists, ie reset ran too early or something
 		if(eventData2 != null){
 			if(eventData2 != null){
