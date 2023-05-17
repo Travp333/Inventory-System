@@ -117,7 +117,7 @@ public class tempHolder : MonoBehaviour
 						invenObj.array[row, column].Name = "";
 						invenObj.array[row, column].Amount = 0;
 						invenObj.array[row, column].image = emptyImage;
-						invenObj.array[row, column].full = false;
+						//invenObj.array[row, column].full = false;
 						//update UI
 						plug.ChangeItem(row, column, emptyImage, 0, "");
 					}

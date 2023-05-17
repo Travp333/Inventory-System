@@ -131,7 +131,7 @@ MonoBehaviour:
   recyclesInto:
   - {fileID: 11400000, guid: ea2b4af47586dad4e8e0c8b48b765de4, type: 2}
   - {fileID: 11400000, guid: c912134061816414ea8e020ef0819fdd, type: 2}
-  amount: 0100000002000000
+  amount: 0100000001000000
 --- !u!64 &72483201339775898
 MeshCollider:
   m_ObjectHideFlags: 0

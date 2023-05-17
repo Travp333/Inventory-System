@@ -15,6 +15,7 @@ public class Item : ScriptableObject
     [SerializeField]
     public Sprite img;
     [SerializeField]
-    public GameObject prefab;
+	public GameObject prefab;
+    
 
 }

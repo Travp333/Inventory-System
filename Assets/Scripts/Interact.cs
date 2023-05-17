@@ -153,6 +153,16 @@ public class Interact : MonoBehaviour
             {
                 if (Physics.SphereCast(cam.position, sphereCastRadius, cam.forward, out hit, distance, mask))
                 {
+	                //IF the the thing you hit is a button
+	                if (hit.transform.gameObject.GetComponent<buttonPush>() != null)
+	                {
+		                //Get the button object
+		                buttonPush button = hit.transform.gameObject.GetComponent<buttonPush>();
+		                if ((button.oneTime && button.anim.GetBool("onePush") == false) || !button.blocker)
+		                {
+			                button.press();
+		                }
+	                }
                 	//hit a pickupable item?
                     if (hit.transform.gameObject.GetComponent<pickUpableItem>() != null)
                     {

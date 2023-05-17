@@ -14,7 +14,6 @@ public class ItemStat {
     public int StackSize = 0;
     public GameObject prefab = null;
 	public Sprite image = null;
-	public bool full;
 }
 public class Inven : MonoBehaviour
 {
@@ -59,6 +58,42 @@ public class Inven : MonoBehaviour
             }
         }
 		Invoke("jumpStart", .1f);
+	}
+	public void EmptyInventorySlot(string coords){
+		string [] coords2 = coords.Split(",");
+		int row = int.Parse(coords2[0]);
+		int column = int.Parse(coords2[1]);
+		array[row, column].Name = "";
+		array[row, column].Weight = 0;
+		array[row, column].Amount = 0;
+		array[row, column].StackSize = 0;
+		array[row, column].prefab = null;
+		array[row, column].image = temp.emptyImage;
+		//updating UI to match new change
+		plug.ClearSlot(row, column, temp.emptyImage);
+	}
+	public void DeductOneFromSlot(string coords){
+		string [] coords2 = coords.Split(",");
+		int row = int.Parse(coords2[0]);
+		int column = int.Parse(coords2[1]);
+		array[row, column].Amount = array[row, column].Amount - 1;
+		//you just dropped the last item in that slot, reverting to default
+		if(array[row, column].Amount <= 0){
+			Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
+			array[row, column].Name = "";
+			array[row, column].Weight = 0;
+			array[row, column].Amount = 0;
+			array[row, column].StackSize = 0;
+			array[row, column].prefab = null;
+			array[row, column].image = temp.emptyImage;
+			//updating UI to match new change
+			plug.ClearSlot(row, column, temp.emptyImage);
+		}
+		else{
+			//there are still more of that item in the slot, updating UI to match new change
+			plug.UpdateItem(row, column, array[row,column].Amount);
+		}
+		
 	}
 	public void jumpStart(){
 		
@@ -372,6 +407,64 @@ public class Inven : MonoBehaviour
 								else{
 									Debug.Log("No room in inventory, dropping on floor");
 									SpawnItem(recyclableItem.recyclesInto[i3].prefab);
+								}
+							}
+							i3++;
+						}
+						i3 = 0;
+						
+						//--------------------------------------------------------------------
+						//you just dropped the last item in that slot, reverting to default
+						if(array[row, column].Amount <= 0){
+							//Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
+							array[row, column].Name = "";
+							array[row, column].Weight = 0;
+							array[row, column].Amount = 0;
+							array[row, column].StackSize = 0;
+							array[row, column].prefab = null;
+							array[row, column].image = temp.emptyImage;
+							//updating UI to match new change
+							plug.ClearSlot(row, column, temp.emptyImage);
+						}
+						else{
+							//there are still more of that item in the slot, updating UI to match new change
+							plug.UpdateItem(row, column, array[row,column].Amount);
+						}
+						return;
+					}
+				}
+			}
+		}
+	}
+	public void RecycleOneItemFromStackIntoInventory(string coords, Inven inven){
+		string [] coords2 = coords.Split(",");
+		int row = int.Parse(coords2[0]);
+		int column = int.Parse(coords2[1]);
+		if(array[row, column].Name != ""){
+			if(array[row, column].prefab.GetComponent<RecyclableItem>()!= null){
+				if(!((temp.tempRow == row)&&(temp.tempColumn == column))){
+					//parsing incoming string into ints
+					//This slot does in fact have an object in it
+					if(array[row, column].Amount > 0){
+						//make the button flash grey for a second to give feedback
+						plug.ButtonPress(row, column);
+						//Debug.Log("Recycling one " + array[row, column].Name + " from slot (" + row + " , "+ column + " ) , now we have" + (array[row,column].Amount - 1));
+						//deduct one of the items from the stack
+						array[row, column].Amount = array[row, column].Amount - 1;
+						//--------------------------------------------------------------------
+						//CREATE RECYCLED ITEM
+						
+						recyclableItem = array[row, column].prefab.GetComponent<RecyclableItem>();
+						foreach(Item i in recyclableItem.recyclesInto){
+							for (int i2 = 0; i2 < recyclableItem.amount[i3]; i2++) {
+								inven.SmartPickUp(recyclableItem.recyclesInto[i3]);
+								if(inven.isPickedUp){
+									//Debug.Log("Successfull pickup!");
+									inven.isPickedUp = false;
+								}
+								else{
+									Debug.Log("No room in inventory, dropping on floor");
+									inven.SpawnItem(recyclableItem.recyclesInto[i3].prefab);
 								}
 							}
 							i3++;
