@@ -144,6 +144,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recyclesInto:
-  - {fileID: 11400000, guid: 3ccd63b841e319f408ba53e3b6d494d2, type: 2}
   - {fileID: 11400000, guid: cd7984bf397a4e14c98d3d56e4f67ca7, type: 2}
   amount: 0100000001000000

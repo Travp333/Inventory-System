@@ -96,7 +96,7 @@ public class Interact : MonoBehaviour
 		//makes sure the temp slot is empty
 		tempSlot.ClearSlot();
 		//puts cursor on screen
-		Cursor.lockState = CursorLockMode.None;
+		Cursor.lockState = CursorLockMode.Confined; 
 		//unhides cursor
 		Cursor.visible = true;
 		//enables UI object

@@ -257,7 +257,7 @@ public class tempHolder : MonoBehaviour
 	//}
 	//The first half of swap, in its own method. This should allow me to do a click and drag instead of a click and click
 	public void HoldItem(Inven inventoryObject, string coords){
-		Debug.Log("running HoldItem()");
+		//Debug.Log("running HoldItem()");
 		//store a reference to the Ui script, as we will use it often
 		UiPlugger plug = inventoryObject.UIPlugger.GetComponent<UiPlugger>();
 		//gets reference to uiplugger component on the item stored in the slot, if there is one
@@ -296,7 +296,7 @@ public class tempHolder : MonoBehaviour
 	}
 	//second half of Swap
 	public void DropItem(Inven inventoryObject, string coords){
-		Debug.Log("Made it to drop item in tempHolder");
+		//Debug.Log("Made it to drop item in tempHolder");
 		//store a reference to the Ui script, as we will use it often
 		UiPlugger plug = inventoryObject.UIPlugger.GetComponent<UiPlugger>();
 		//gets reference to uiplugger component on the item stored in the slot, if there is one
@@ -336,7 +336,7 @@ public class tempHolder : MonoBehaviour
 						
 					}
 					else{
-						//Debug.Log("Stacking two stacks of same item type");
+						Debug.Log("Stacking two stacks of same item type");
 						//we can simply add the temp slot and second button press together
 						//add the items in temp slot to the second pressed button's slot, clear out original button's slot and temp slot
 						inventoryObject.array[row, column].Amount = tempInven.array[tempRow, tempColumn].Amount + inventoryObject.array[row, column].Amount;
@@ -350,7 +350,7 @@ public class tempHolder : MonoBehaviour
 				}
 			}
 			else{
-				Debug.Log("Clean swap, two different objects, doing swap");
+				Debug.Log("Clean swap, two different objects, doing swap. Object 1 is "+ tempInven.array[tempRow, tempColumn].image.name + " and Object 2 is " + inventoryObject.array[row, column].image.name + " and finally, this is Slot: "+ slot.Name);
 				//clean swap, two different objects
 				//we find the inventory slot the tempslot object is pointing to, and set it equal to the second button's data
 				tempInven.array[tempRow, tempColumn] = inventoryObject.array[row, column];

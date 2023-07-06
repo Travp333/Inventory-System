@@ -6,7 +6,7 @@ using UnityEngine.UI;
 //gotten here: https://answers.unity.com/questions/993336/ui-button-detecting-right-mouse-button.html
 //Written by Cherno, modified by Travis
 
-//TODO I WANNA MAKE A SLIGHT DELAY WHEN YOU HOLD BEFORE IT ACTAULLY STARTS HOLDING SO THAT WHEN YOU TABBUTTON THE LITTLE BAR DOESN SHOW UP
+//TODO I WANNA MAKE A SLIGHT DELAY WHEN YOU HOLD BEFORE IT ACTAULLY STARTS HOLDING SO THAT WHEN YOU TAP BUTTON THE LITTLE BAR DOESN SHOW UP
 //When dragging from a storage object the icon should be on the top not below the menu
 //clicking and dragging from the menu to the backdrop should drop the item 
 //make multiples of items stack together on ground rust styled 
@@ -48,6 +48,7 @@ public class MultiClickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 	
 	public void OnBeginDrag(PointerEventData eventData){
 		//if object isnt an empty slot
+		startingPos = this.transform.position;
 		if(GetComponent<Image>().sprite.name != "empty"){
 			
 			GetComponent<StorageFinder>().storage.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>().sortingOrder = 999;
@@ -62,17 +63,25 @@ public class MultiClickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 			canvasGroup.blocksRaycasts = false;
 			leftDown.Invoke();
 		}
+		else{
+			Debug.Log("Grabbed empty");
+			this.transform.position = startingPos;
+		}
 	}
 	public void OnDrag(PointerEventData eventData){
-		GetComponent<StorageFinder>().storage.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>().sortingOrder = 999;
+		
 		if(GetComponent<Image>().sprite.name != "empty"){
+			GetComponent<StorageFinder>().storage.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>().sortingOrder = 999;
 			//Debug.Log("On Drag");
 			rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+		}
+		else{
+			Debug.Log("Dragging Empty");
 		}
 	}
 	public void OnEndDrag(PointerEventData eventData){
 		GetComponent<StorageFinder>().storage.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>().sortingOrder = 0;
-		//Debug.Log("End Drag on "+ heldItemName);
+		Debug.Log("End Drag on "+ heldItemName);
 		heldItemName = null;
 		canvasGroup.alpha = 1f;
 		canvasGroup.blocksRaycasts = true;
@@ -83,7 +92,7 @@ public class MultiClickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 	}
 	public void OnDrop(PointerEventData eventData){
 		GetComponent<StorageFinder>().storage.GetComponent<Inven>().UIPlugger.GetComponent<Canvas>().sortingOrder = 0;
-		//Debug.Log("End Drop on " + this.transform.parent.name + " and " + heldItemName);
+		Debug.Log("End Drop on " + this.transform.parent.name + " and " + heldItemName);
 		canvasGroup.alpha = 1f;
 		canvasGroup.blocksRaycasts = true;
 		leftRelease.Invoke();
@@ -114,7 +123,8 @@ public class MultiClickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 	
 	public void Update(){
 		//Mouse button is being held down
-		if(pointerDown){
+		if(pointerDown && GetComponent<Image>().sprite.name != "empty"){
+			//Debug.Log(GetComponent<Image>().sprite.name);
 			if(eventData2.button == PointerEventData.InputButton.Left){
 				if(!leftBlock){
 					leftClick.Invoke();
