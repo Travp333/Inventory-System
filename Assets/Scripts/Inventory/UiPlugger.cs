@@ -145,8 +145,6 @@ public class UiPlugger : MonoBehaviour
 	}
 	//this is to give feedback for when a button has been selected, ie it has been stored in a temp slot preparing for a swap
 	
-	//IF YOU SPAM CLICK A BUTTON YOU CAN BREAK THESE METHOD, NEEDS UPDATING 
-	
 	public void ButtonSelected(int row, int column) {
 		//Debug.Log("Made it into button selected");
         foreach (GameObject g in slots)
