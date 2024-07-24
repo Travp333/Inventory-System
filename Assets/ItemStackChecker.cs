@@ -26,7 +26,7 @@ public class ItemStackChecker : MonoBehaviour
                             if(!block){
                                 other.GetComponent<ItemStackChecker>().block = true;
                                 Destroy(other.transform.parent.gameObject);
-                                pickUp.count += count;
+                                pickUp.EditCount(pickUp.count + count);
                                 Debug.Log("Deleted Valid other object, now have " + pickUp.count + " " + pickUp.item.name, transform.parent.gameObject);
                             }
                         }
