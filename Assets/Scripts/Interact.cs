@@ -169,7 +169,19 @@ public class Interact : MonoBehaviour
                     	//store reference to the hit object
 	                    item = hit.transform.gameObject.GetComponent<pickUpableItem>().item;
 	                    //update UI
-	                    inv.SmartPickUp(item);
+						int count;
+						count = hit.transform.gameObject.GetComponent<pickUpableItem>().count;
+						if(count > 1){
+							//does this stack contain multiple objects?
+							// if so, pick up x amount of times!
+							for (int i = 0; i < count; i++)
+							{
+								inv.SmartPickUp(item);
+							}
+						}
+						else{
+							inv.SmartPickUp(item);
+						}
 	                    //Checks if the object was successfully picked up
                         if (inv.isPickedUp)
                         {
@@ -181,9 +193,22 @@ public class Interact : MonoBehaviour
 	                    //else, pickup failed
                         else
                         {
-                        	Destroy(hit.transform.gameObject);
-                        	inv.SpawnItem(item.prefab);
-                            Debug.Log("Inventory full!");
+							if(count > 1){
+								//Does this stack contain multiple objects?
+								//if so update prefab to have accurate count
+								GameObject it;
+								it = inv.SpawnItem(item.prefab);
+								it.GetComponent<pickUpableItem>().count = count;
+								Destroy(hit.transform.gameObject);
+								Debug.Log("Inventory full!");
+							}
+							else{
+								// normal drop
+								inv.SpawnItem(item.prefab);
+								Destroy(hit.transform.gameObject);
+								Debug.Log("Inventory full!");
+							}
+
                         }
                     }
 	                //if you did not hit a pickupable object, check if you hit a storage device

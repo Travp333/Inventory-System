@@ -299,9 +299,10 @@ public class Inven : MonoBehaviour
 
 
 	//This script actually Instantiates a new object with the same stats as the object stored in the inventory
-	public void SpawnItem(GameObject item){
+	public GameObject SpawnItem(GameObject item){
 		GameObject b = Instantiate(item, droppedItemSpawnPoint.position, this.transform.rotation);
         b.GetComponent<Rigidbody>().velocity = this.gameObject.GetComponent<Rigidbody>().velocity * 2f;
+		return b;
 	}
 	//this drops a specific item that is found using its exact coordinates
 	public void DropSpecificItem(string coords){

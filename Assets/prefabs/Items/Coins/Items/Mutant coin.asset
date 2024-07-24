@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Objname: Mutant Coin
   weight: 0.5
-  stackSize: 5
+  stackSize: 10
   img: {fileID: 21300000, guid: 36dc51a00783aec4b90c668145b2efc2, type: 3}
   prefab: {fileID: 3237129850225769620, guid: cd79c71bf50085646aed238399ee3ee1, type: 3}

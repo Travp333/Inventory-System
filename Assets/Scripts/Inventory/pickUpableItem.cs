@@ -6,4 +6,6 @@ public class pickUpableItem : MonoBehaviour
 {
     [SerializeField]
     public Item item;
+    [SerializeField]
+    public int count = 1;
 }
