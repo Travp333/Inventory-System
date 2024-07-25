@@ -1,19 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 //This script allows inventory objects to be stored in a 2D array. This script should be able to be placed on both a player and a storage device. 
 //This scirpt handles all the storage and manipulation of this array on the backend, ie picking up or dropping an object.
 //Written by Conor and Travis
 
-//This holds all the info we pull from a valid inventory object
+//This holds all the info we pull from a valid inventory object. We effectively copy the date from an Item object, then paste it here to be stored in a inventory slot
 public class ItemStat {
 
-    public string Name = "";
-    public float Weight = 0;
+    public string Objname = "";
+    public float weight = 0;
     public int Amount = 0;
-    public int StackSize = 0;
+    public int stackSize = 0;
     public GameObject prefab = null;
-	public Sprite image = null;
+	public Sprite img = null;
 }
 public class Inven : MonoBehaviour
 {
@@ -35,13 +36,12 @@ public class Inven : MonoBehaviour
     [HideInInspector]
     public Item item;
 	public ItemStat [,] array;
-	UiPlugger plug;
-	tempHolder temp;
+	public UiPlugger plug;
+	public tempHolder temp;
 	int loopCounter;
-	int i2;
+	int column;
 	int i3;
 	RecyclableItem recyclableItem;
-    // Start is called before the first frame update
 	public void Start()
 	{
 		temp = FindObjectOfType<tempHolder>();
@@ -49,57 +49,23 @@ public class Inven : MonoBehaviour
 		
 		//This creates our 2D array based on the size given in editor
 		array = new ItemStat[vSize,hSize];
-		for (int i = 0; i < vSize; i++)
+		for (int row = 0; row < vSize; row++)
         {
-			for (int i2 = 0; i2 < hSize; i2++)
+			for (int column = 0; column < hSize; column++)
             {
-                array[i,i2] = new ItemStat();
-	            array[i,i2].image = temp.emptyImage;
+                array[row,column] = new ItemStat();
+	            array[row,column].img = temp.emptyImage;
             }
         }
-		Invoke("jumpStart", .1f);
+		Invoke("lateStart", .1f);
 	}
-	public void EmptyInventorySlot(string coords){
-		string [] coords2 = coords.Split(",");
-		int row = int.Parse(coords2[0]);
-		int column = int.Parse(coords2[1]);
-		array[row, column].Name = "";
-		array[row, column].Weight = 0;
-		array[row, column].Amount = 0;
-		array[row, column].StackSize = 0;
-		array[row, column].prefab = null;
-		array[row, column].image = temp.emptyImage;
-		//updating UI to match new change
-		plug.ClearSlot(row, column, temp.emptyImage);
-	}
-	public void DeductOneFromSlot(string coords){
-		string [] coords2 = coords.Split(",");
-		int row = int.Parse(coords2[0]);
-		int column = int.Parse(coords2[1]);
-		array[row, column].Amount = array[row, column].Amount - 1;
-		//you just dropped the last item in that slot, reverting to default
-		if(array[row, column].Amount <= 0){
-			Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
-			array[row, column].Name = "";
-			array[row, column].Weight = 0;
-			array[row, column].Amount = 0;
-			array[row, column].StackSize = 0;
-			array[row, column].prefab = null;
-			array[row, column].image = temp.emptyImage;
-			//updating UI to match new change
-			plug.ClearSlot(row, column, temp.emptyImage);
-		}
-		else{
-			//there are still more of that item in the slot, updating UI to match new change
-			plug.UpdateItem(row, column, array[row,column].Amount);
-		}
-		
-	}
-	public void jumpStart(){
-		
+	//Runs .1 second after start, allows inventory slots and objects to be created before creating UI reference and filling inventory with starting objects
+	public void lateStart(){
+		//Reference to UI object, allows inventory to update Ui elemnents 
 		plug = UIPlugger.GetComponent<UiPlugger>();
+		//Fills inventory with objects placed in startingInvenPrefabs in editor ( any were placed, basically just lets you force an inventory to start with objects already in it)
 		foreach( GameObject g in startingInvenPrefabs){
-			for (int i = 0; i < startingInvenCount[i2]; i++) {
+			for (int i = 0; i < startingInvenCount[column]; i++) {
 				SmartPickUp(g.GetComponent<pickUpableItem>().item);	
 				if(isPickedUp){
 					//Debug.Log("Successfull pickup!");
@@ -110,59 +76,84 @@ public class Inven : MonoBehaviour
 					SpawnItem(g.GetComponent<pickUpableItem>().item.prefab);
 				}
 			}
-			i2++;
+			column++;
 		}
-		i2 = 0;
+		column = 0;
 		
 	}
 
+	//This method just copied data from one object to another. This could be Item to ItemStat, or ItemStat to ItemStat
+	// basically this method is classed when you pick up an object from the world and when you pick one up from an inventory
+	public void CopyItemData(int row, int column, Item item){
+		array[row,column].Objname = item.Objname;
+		array[row,column].weight = item.weight;
+		array[row,column].Amount = array[row,column].Amount + 1;
+		array[row,column].stackSize = item.stackSize;
+		array[row,column].prefab = item.prefab;
+		array[row, column].img = item.img;
+	}
+	//Overload method for itemstat objects
+	public void CopyItemData(int row, int column, ItemStat item){
+		array[row,column].Objname = item.Objname;
+		array[row,column].weight = item.weight;
+		array[row,column].Amount = array[row,column].Amount + 1;
+		array[row,column].stackSize = item.stackSize;
+		array[row,column].prefab = item.prefab;
+		array[row, column].img = item.img;
+	}
+	//This method clears all the info from a given inventory slot
+	public void NullInvenSlot(int row, int column){
+		array[row, column].Objname = "";
+		array[row, column].weight = 0;
+		array[row, column].Amount = 0;
+		array[row, column].stackSize = 0;
+		array[row, column].prefab = null;
+		array[row, column].img = temp.emptyImage;
+	}
+
 	//This handles picking up a new valid Inventory Item 
+	//Item Objects are items in the world attached to 3d models storing info, ie the physical coin
 	public void PickUp(Item item){
 		//iterating through colomns
-		for (int i = 0; i < vSize; i++)
+		for (int row = 0; row < vSize; row++)
 		{
 			//Debug.Log("Column " + i);
 			//iterating through rows
-			for (int i2 = 0; i2 < hSize; i2++)
+			for (int column = 0; column < hSize; column++)
 			{
-				//Debug.Log("Row" + i2);
+				//Debug.Log("Row" + column);
 				//is this slot empty?
-				if(array[i,i2].Name == ""){
+				if(array[row,column].Objname == ""){
 					//yes empty, filling slot
-					//Debug.Log("Slot (" + i + " , "+ i2 + " ) is empty, putting " + item.Objname + " in slot");
+					//Debug.Log("Slot (" + i + " , "+ column + " ) is empty, putting " + item.Objname + " in slot");
 					isPickedUp = true;
 					//Debug.Log("ispickedup set to "+ isPickedUp);
-					array[i,i2].Name = item.Objname;
-					array[i,i2].Weight = item.weight;
-					array[i,i2].Amount = array[i,i2].Amount + 1;
-					array[i,i2].StackSize = item.stackSize;
-					array[i,i2].prefab = item.prefab;
-					array[i, i2].image = item.img;
+					CopyItemData(row,column, item);
 					//updating UI to match new change
-					plug.ChangeItem(i, i2, item.img, array[i,i2].Amount, array[i,i2].Name);
-					i=0;
-					i2=0;
+					plug.ChangeItem(row, column, item.img, array[row,column].Amount, array[row,column].Objname);
+					row=0;
+					column=0;
 					return;
 				}
 				//no theres something here
 				else{
-					//Debug.Log("Slot (" + i + " , " + i2 + " ) has " + array[i,i2].Amount + " " + array[i,i2].Name + " in it, checking if it matches the new " + item.Objname);
+					//Debug.Log("Slot (" + i + " , " + column + " ) has " + array[row,column].Amount + " " + array[row,column].Objname + " in it, checking if it matches the new " + item.Objname);
 					//basically is there room for it, is it the same object
-					if(array[i,i2].Name == item.Objname && array[i,i2].StackSize !>= array[i,i2].Amount + 1){
-						//Debug.Log("Slot (" + i + " , "+ i2 + " ) has room, adding " + item.Objname + " to stack");
+					if(array[row,column].Objname == item.Objname && array[row,column].stackSize !>= array[row,column].Amount + 1){
+						//Debug.Log("Slot (" + i + " , "+ column + " ) has room, adding " + item.Objname + " to stack");
 						//same object, room in the stack, adding to stack
 						isPickedUp = true;
 						//Debug.Log("ispickedup set to "+ isPickedUp);
-						array[i,i2].Amount = array[i,i2].Amount + 1;
-						//Debug.Log("we now have " + array[i,i2].Amount + " "+ array[i,i2].Name + " in " + "Slot (" + i + " , "+ i2 + " ) ");
+						array[row,column].Amount = array[row,column].Amount + 1;
+						//Debug.Log("we now have " + array[row,column].Amount + " "+ array[row,column].Objname + " in " + "Slot (" + i + " , "+ column + " ) ");
 						//updating UI to match new change
-						plug.UpdateItem(i, i2, array[i,i2].Amount);
-						i=0;
-						i2=0;
+						plug.UpdateItem(row, column, array[row,column].Amount);
+						row=0;
+						column=0;
 						return;
 					}
-					else if(array[i,i2].StackSize <= array[i,i2].Amount + 1){
-						//Debug.Log("cant hold more than " + array[i,i2].Amount + " " + array[i,i2].Name + " in one stack, starting new stack... ");
+					else if(array[row,column].stackSize <= array[row,column].Amount + 1){
+						//Debug.Log("cant hold more than " + array[row,column].Amount + " " + array[row,column].Objname + " in one stack, starting new stack... ");
 					}
 					//otherwise theres something here but its not the same type or theres no room for it
 				}
@@ -171,52 +162,48 @@ public class Inven : MonoBehaviour
 	}
 	
 	//Overload that allows picking up itemstat objects
+	// ItemStat Objects are inventory objects that are already stored in an inventory, ie the coin you just picked up from inside a box
 	public void PickUp(ItemStat item){
 		//iterating through colomns
-		for (int i = 0; i < vSize; i++)
+		for (int row = 0; row < vSize; row++)
 		{
 			//Debug.Log("Column " + i);
 			//iterating through rows
-			for (int i2 = 0; i2 < hSize; i2++)
+			for (int column = 0; column < hSize; column++)
 			{
-				//Debug.Log("Row" + i2);
+				//Debug.Log("Row" + column);
 				//is this slot empty?
-				if(array[i,i2].Name == ""){
+				if(array[row,column].Objname == ""){
 					//yes empty, filling slot
-					//Debug.Log("Slot (" + i + " , "+ i2 + " ) is empty, putting " + item.Objname + " in slot");
+					//Debug.Log("Slot (" + i + " , "+ column + " ) is empty, putting " + item.Objname + " in slot");
 					isPickedUp = true;
 					//Debug.Log("ispickedup set to "+ isPickedUp);
-					array[i,i2].Name = item.Name;
-					array[i,i2].Weight = item.Weight;
-					array[i,i2].Amount = array[i,i2].Amount + 1;
-					array[i,i2].StackSize = item.StackSize;
-					array[i,i2].prefab = item.prefab;
-					array[i, i2].image = item.image;
+					CopyItemData(row, column, item);
 					//updating UI to match new change
-					plug.ChangeItem(i, i2, item.image, array[i,i2].Amount, array[i,i2].Name);
-					i=0;
-					i2=0;
+					plug.ChangeItem(row, column, item.img, array[row,column].Amount, array[row,column].Objname);
+					row=0;
+					column=0;
 					return;
 				}
 				//no theres something here
 				else{
-					//Debug.Log("Slot (" + i + " , " + i2 + " ) has " + array[i,i2].Amount + " " + array[i,i2].Name + " in it, checking if it matches the new " + item.Objname);
+					//Debug.Log("Slot (" + i + " , " + column + " ) has " + array[row,column].Amount + " " + array[row,column].Objname + " in it, checking if it matches the new " + item.Objname);
 					//basically is there room for it, is it the same object
-					if(array[i,i2].Name == item.Name && array[i,i2].StackSize !>= array[i,i2].Amount + 1){
-						//Debug.Log("Slot (" + i + " , "+ i2 + " ) has room, adding " + item.Objname + " to stack");
+					if(array[row,column].Objname == item.Objname && array[row,column].stackSize !>= array[row,column].Amount + 1){
+						//Debug.Log("Slot (" + i + " , "+ column + " ) has room, adding " + item.Objname + " to stack");
 						//same object, room in the stack, adding to stack
 						isPickedUp = true;
 						//Debug.Log("ispickedup set to "+ isPickedUp);
-						array[i,i2].Amount = array[i,i2].Amount + 1;
-						//Debug.Log("we now have " + array[i,i2].Amount + " "+ array[i,i2].Name + " in " + "Slot (" + i + " , "+ i2 + " ) ");
+						array[row,column].Amount = array[row,column].Amount + 1;
+						//Debug.Log("we now have " + array[row,column].Amount + " "+ array[row,column].Objname + " in " + "Slot (" + i + " , "+ column + " ) ");
 						//updating UI to match new change
-						plug.UpdateItem(i, i2, array[i,i2].Amount);
-						i=0;
-						i2=0;
+						plug.UpdateItem(row, column, array[row,column].Amount);
+						row=0;
+						column=0;
 						return;
 					}
-					else if(array[i,i2].StackSize <= array[i,i2].Amount + 1){
-						//Debug.Log("cant hold more than " + array[i,i2].Amount + " " + array[i,i2].Name + " in one stack, starting new stack... ");
+					else if(array[row,column].stackSize <= array[row,column].Amount + 1){
+						//Debug.Log("cant hold more than " + array[row,column].Amount + " " + array[row,column].Objname + " in one stack, starting new stack... ");
 					}
 					//otherwise theres something here but its not the same type or theres no room for it
 				}
@@ -224,24 +211,24 @@ public class Inven : MonoBehaviour
 		}
 	}
 	
-	//this handles picking up new inventory items in a way that prioritizes existing stacks
+	//this handles picking up new inventory items in a way that tries to prioritize existing stacks and falls back to the default pickup method if not necessary
 	public void SmartPickUp(Item item){
-		//Debug.Log("Starting "+ this.gameObject.name + " with a " + item.name);
+		//Debug.Log("Starting "+ this.gameObject.Objname + " with a " + item.Objname);
 		//iterating through colomns
-		for (int i = 0; i < vSize; i++)
+		for (int row = 0; row < vSize; row++)
 		{
 			//Debug.Log("Column " + i);
 			//iterating through rows
-			for (int i2 = 0; i2 < hSize; i2++)
+			for (int column = 0; column < hSize; column++)
 			{
-				if((array[i,i2].Name == item.Objname) && (loopCounter <= (hSize * vSize)) && (array[i,i2].StackSize !>= array[i,i2].Amount + 1)){
+				if((array[row,column].Objname == item.Objname) && (loopCounter <= (hSize * vSize)) && (array[row,column].stackSize !>= array[row,column].Amount + 1)){
 					//found a stack of the existing item in inventory
 					isPickedUp = true;
 					//Debug.Log("ispickedup set to "+ isPickedUp);
-					array[i,i2].Amount = array[i,i2].Amount + 1;
-					plug.UpdateItem(i,i2,array[i,i2].Amount);
-					i=0;
-					i2=0;
+					array[row,column].Amount = array[row,column].Amount + 1;
+					plug.UpdateItem(row,column,array[row,column].Amount);
+					row=0;
+					column=0;
 					loopCounter = 0;
 					return;
 				}
@@ -261,23 +248,24 @@ public class Inven : MonoBehaviour
 		}
 	}
 	//overload that allows picking up itemstat objects
+	//this is for shift clicking from one inventory to another, prioritizes stacks but reverts to normal pickup if not necessary
 	public void SmartPickUp(ItemStat item){
-		//Debug.Log("Starting "+ this.gameObject.name + " with a " + item.name);
+		//Debug.Log("Starting "+ this.gameObject.Objname + " with a " + item.Objname);
 		//iterating through colomns
-		for (int i = 0; i < vSize; i++)
+		for (int row = 0; row < vSize; row++)
 		{
 			//Debug.Log("Column " + i);
 			//iterating through rows
-			for (int i2 = 0; i2 < hSize; i2++)
+			for (int column = 0; column < hSize; column++)
 			{
-				if((array[i,i2].Name == item.Name) && (loopCounter <= (hSize * vSize)) && (array[i,i2].StackSize !>= array[i,i2].Amount + 1)){
+				if((array[row,column].Objname == item.Objname) && (loopCounter <= (hSize * vSize)) && (array[row,column].stackSize !>= array[row,column].Amount + 1)){
 					//found a stack of the existing item in inventory
 					isPickedUp = true;
 					//Debug.Log("ispickedup set to "+ isPickedUp);
-					array[i,i2].Amount = array[i,i2].Amount + 1;
-					plug.UpdateItem(i,i2,array[i,i2].Amount);
-					i=0;
-					i2=0;
+					array[row,column].Amount = array[row,column].Amount + 1;
+					plug.UpdateItem(row,column,array[row,column].Amount);
+					row=0;
+					column=0;
 					loopCounter = 0;
 					return;
 				}
@@ -297,14 +285,16 @@ public class Inven : MonoBehaviour
 		}
 	}
 
-
 	//This script actually Instantiates a new object with the same stats as the object stored in the inventory
+
+	//used for dropping an inventory object out of your inventory into the world. currently works with item stacks forming immediatly
+	// after dropping all the coins in one spot but could be cleaned up a bit
 	public GameObject SpawnItem(GameObject item){
 		GameObject b = Instantiate(item, droppedItemSpawnPoint.position, this.transform.rotation);
         b.GetComponent<Rigidbody>().velocity = this.gameObject.GetComponent<Rigidbody>().velocity * 2f;
 		return b;
 	}
-	//this drops a specific item that is found using its exact coordinates
+	//this drops one specific item that is found using its exact coordinates
 	public void DropSpecificItem(string coords){
 		//Debug.Log(temp.tempRow + ", " +temp.tempColumn);
 		string [] coords2 = coords.Split(",");
@@ -316,20 +306,15 @@ public class Inven : MonoBehaviour
 			if(array[row, column].Amount > 0){
 				//make the button flash grey for a second to give feedback
 				plug.ButtonPress(row, column);
-				//Debug.Log("Dropping one " + array[row, column].Name + " from slot (" + row + " , "+ column + " ) , now we have" + (array[row,column].Amount - 1));
+				//Debug.Log("Dropping one " + array[row, column].Objname + " from slot (" + row + " , "+ column + " ) , now we have" + (array[row,column].Amount - 1));
 				//deduct one of the items from the stack
 				array[row, column].Amount = array[row, column].Amount - 1;
 				//spawn a prefab with the same info as that item
 				SpawnItem(array[row, column].prefab);
 				//you just dropped the last item in that slot, reverting to default
 	            if(array[row, column].Amount <= 0){
-		            //Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
-	                array[row, column].Name = "";
-	                array[row, column].Weight = 0;
-	                array[row, column].Amount = 0;
-	                array[row, column].StackSize = 0;
-	                array[row, column].prefab = null;
-		            array[row, column].image = temp.emptyImage;
+		            //Debug.Log("Out of " + array[row, column].Objname + " in slot (" + row + " , "+ column + " ) , slot now empty ");
+					NullInvenSlot(row, column);
 	                //updating UI to match new change
 		            plug.ClearSlot(row, column, temp.emptyImage);
 	            }
@@ -341,12 +326,12 @@ public class Inven : MonoBehaviour
 			}
 		}
 	}
+	//Drops entire stack of objects from given coordinates
 	public void DropWholeStack(string coords){
 		//Debug.Log("Made it to inventory with coords "+ coords);
-		
 		//Debug.Log(temp.tempRow + ", " +temp.tempColumn);
 		string [] coords2 = coords.Split(",");
-		int row = int.Parse(coords2[0]);
+		int row = int.Parse(coords2[0]); 
 		int column = int.Parse(coords2[1]);
 		//parsing incoming string into ints
 		//This slot does in fact have an object in it
@@ -360,13 +345,8 @@ public class Inven : MonoBehaviour
 			array[row, column].Amount = 0;
 			//you just dropped the last item in that slot, reverting to default
 			if(array[row, column].Amount <= 0){
-				//Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
-				array[row, column].Name = "";
-				array[row, column].Weight = 0;
-				array[row, column].Amount = 0;
-				array[row, column].StackSize = 0;
-				array[row, column].prefab = null;
-				array[row, column].image = temp.emptyImage;
+				//Debug.Log("Out of " + array[row, column].Objname + " in slot (" + row + " , "+ column + " ) , slot now empty ");
+				NullInvenSlot(row, column);
 				//updating UI to match new change
 				plug.ClearSlot(row, column, temp.emptyImage);
 			}
@@ -377,178 +357,5 @@ public class Inven : MonoBehaviour
 			return;
 		}
 		
-	}
-
-	public void RecycleOneItemFromStack(string coords){
-		string [] coords2 = coords.Split(",");
-		int row = int.Parse(coords2[0]);
-		int column = int.Parse(coords2[1]);
-		if(array[row, column].Name != ""){
-			if(array[row, column].prefab.GetComponent<RecyclableItem>()!= null){
-				if(!((temp.tempRow == row)&&(temp.tempColumn == column))){
-					//parsing incoming string into ints
-					//This slot does in fact have an object in it
-					if(array[row, column].Amount > 0){
-						//make the button flash grey for a second to give feedback
-						plug.ButtonPress(row, column);
-						Debug.Log("Recycling one " + array[row, column].Name + " from slot (" + row + " , "+ column + " ) , now we have" + (array[row,column].Amount - 1));
-						//deduct one of the items from the stack
-						array[row, column].Amount = array[row, column].Amount - 1;
-						//--------------------------------------------------------------------
-						//CREATE RECYCLED ITEM
-						
-						recyclableItem = array[row, column].prefab.GetComponent<RecyclableItem>();
-						foreach(Item i in recyclableItem.recyclesInto){
-							for (int i2 = 0; i2 < recyclableItem.amount[i3]; i2++) {
-								SmartPickUp(recyclableItem.recyclesInto[i3]);
-								if(isPickedUp){
-									//Debug.Log("Successfull pickup!");
-									isPickedUp = false;
-								}
-								else{
-									Debug.Log("No room in inventory, dropping on floor");
-									SpawnItem(recyclableItem.recyclesInto[i3].prefab);
-								}
-							}
-							i3++;
-						}
-						i3 = 0;
-						
-						//--------------------------------------------------------------------
-						//you just dropped the last item in that slot, reverting to default
-						if(array[row, column].Amount <= 0){
-							//Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
-							array[row, column].Name = "";
-							array[row, column].Weight = 0;
-							array[row, column].Amount = 0;
-							array[row, column].StackSize = 0;
-							array[row, column].prefab = null;
-							array[row, column].image = temp.emptyImage;
-							//updating UI to match new change
-							plug.ClearSlot(row, column, temp.emptyImage);
-						}
-						else{
-							//there are still more of that item in the slot, updating UI to match new change
-							plug.UpdateItem(row, column, array[row,column].Amount);
-						}
-						return;
-					}
-				}
-			}
-		}
-	}
-	public void RecycleOneItemFromStackIntoInventory(string coords, Inven inven){
-		string [] coords2 = coords.Split(",");
-		int row = int.Parse(coords2[0]);
-		int column = int.Parse(coords2[1]);
-		if(array[row, column].Name != ""){
-			if(array[row, column].prefab.GetComponent<RecyclableItem>()!= null){
-				if(!((temp.tempRow == row)&&(temp.tempColumn == column))){
-					//parsing incoming string into ints
-					//This slot does in fact have an object in it
-					if(array[row, column].Amount > 0){
-						//make the button flash grey for a second to give feedback
-						plug.ButtonPress(row, column);
-						//Debug.Log("Recycling one " + array[row, column].Name + " from slot (" + row + " , "+ column + " ) , now we have" + (array[row,column].Amount - 1));
-						//deduct one of the items from the stack
-						array[row, column].Amount = array[row, column].Amount - 1;
-						//--------------------------------------------------------------------
-						//CREATE RECYCLED ITEM
-						
-						recyclableItem = array[row, column].prefab.GetComponent<RecyclableItem>();
-						foreach(Item i in recyclableItem.recyclesInto){
-							for (int i2 = 0; i2 < recyclableItem.amount[i3]; i2++) {
-								inven.SmartPickUp(recyclableItem.recyclesInto[i3]);
-								if(inven.isPickedUp){
-									//Debug.Log("Successfull pickup!");
-									inven.isPickedUp = false;
-								}
-								else{
-									Debug.Log("No room in inventory, dropping on floor");
-									inven.SpawnItem(recyclableItem.recyclesInto[i3].prefab);
-								}
-							}
-							i3++;
-						}
-						i3 = 0;
-						
-						//--------------------------------------------------------------------
-						//you just dropped the last item in that slot, reverting to default
-						if(array[row, column].Amount <= 0){
-							//Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
-							array[row, column].Name = "";
-							array[row, column].Weight = 0;
-							array[row, column].Amount = 0;
-							array[row, column].StackSize = 0;
-							array[row, column].prefab = null;
-							array[row, column].image = temp.emptyImage;
-							//updating UI to match new change
-							plug.ClearSlot(row, column, temp.emptyImage);
-						}
-						else{
-							//there are still more of that item in the slot, updating UI to match new change
-							plug.UpdateItem(row, column, array[row,column].Amount);
-						}
-						return;
-					}
-				}
-			}
-		}
-	}
-	public void RecycleEntireStack(string coords){
-		string [] coords2 = coords.Split(",");
-		int row = int.Parse(coords2[0]);
-		int column = int.Parse(coords2[1]);
-		if(array[row, column].Name != ""){
-			if(array[row, column].prefab.GetComponent<RecyclableItem>()!= null){
-				if(!((temp.tempRow == row)&&(temp.tempColumn == column))){
-					//parsing incoming string into ints
-					//This slot does in fact have an object in it
-					//make the button flash grey for a second to give feedback
-					plug.ButtonPress(row, column);
-					//Debug.Log("Recycling all " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , now we have 0 ");
-					//deduct one of the items from the stack
-					
-					//--------------------------------------------------------------------
-					//CREATE RECYCLED ITEM
-					
-					recyclableItem = array[row, column].prefab.GetComponent<RecyclableItem>();
-					for (int i4 = 0; i4 < array[row, column].Amount; i4++)
-					{
-						foreach(Item i in recyclableItem.recyclesInto){
-							for (int i2 = 0; i2 < recyclableItem.amount[i3]; i2++) {
-								SmartPickUp(recyclableItem.recyclesInto[i3]);
-								if(isPickedUp){
-									//Debug.Log("Successfull pickup!");
-									isPickedUp = false;
-								}
-								else{
-									//Debug.Log("No room in inventory, dropping on floor");
-									SpawnItem(recyclableItem.recyclesInto[i3].prefab);
-								}
-							}
-							i3++;
-						}
-						i3 = 0;
-					}
-					array[row, column].Amount = 0;
-					
-					//--------------------------------------------------------------------
-					//you just dropped the last item in that slot, reverting to default
-					
-					//Debug.Log("Out of " + array[row, column].Name + " in slot (" + row + " , "+ column + " ) , slot now empty ");
-					array[row, column].Name = "";
-					array[row, column].Weight = 0;
-					array[row, column].Amount = 0;
-					array[row, column].StackSize = 0;
-					array[row, column].prefab = null;
-					array[row, column].image = temp.emptyImage;
-					//updating UI to match new change
-					plug.ClearSlot(row, column, temp.emptyImage);
-					return;
-					
-				}
-			}
-		}
 	}
 }

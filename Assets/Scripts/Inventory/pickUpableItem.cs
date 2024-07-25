@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class pickUpableItem : MonoBehaviour
+// This has become too specific to coins, need to make more generic!
 {
     [SerializeField]
     public Item item;

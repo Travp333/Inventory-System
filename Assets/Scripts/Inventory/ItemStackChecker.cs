@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class ItemStackChecker : MonoBehaviour
 {
+    //DOESNT WORK WHEN YOU TRY TO PICK UP AN ITEM WITH A FULL INVENTORY AND IT DROPS BACK ON THE GROUND
     public bool block;
     private void OnTriggerEnter(Collider other)
     {
