@@ -20,7 +20,7 @@ public class ItemStackChecker : MonoBehaviour
                 if(otherPickUp.item.name == pickUp.item.name){
                     int count; 
                     count = otherPickUp.count;
-                    Debug.Log("Collision with " + count + " of same item " + pickUp.item, transform.parent.gameObject);
+                    //Debug.Log("Collision with " + count + " of same item " + pickUp.item, transform.parent.gameObject);
                     //if yes, delete the "other" one
                     if(other.transform.parent.gameObject != null){
                         if(pickUp.count + count <= pickUp.item.stackSize){
@@ -28,7 +28,7 @@ public class ItemStackChecker : MonoBehaviour
                                 other.GetComponent<ItemStackChecker>().block = true;
                                 Destroy(other.transform.parent.gameObject);
                                 pickUp.EditCount(pickUp.count + count);
-                                Debug.Log("Deleted Valid other object, now have " + pickUp.count + " " + pickUp.item.name, transform.parent.gameObject);
+                                //Debug.Log("Deleted Valid other object, now have " + pickUp.count + " " + pickUp.item.name, transform.parent.gameObject);
                             }
                         }
                     }
