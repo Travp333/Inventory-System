@@ -14,25 +14,30 @@ public class pickUpableItem : MonoBehaviour
     public GameObject[] StackMeshes;
     public void DisableAllMeshes(){
         foreach (GameObject g in StackMeshes){
-            g.SetActive(false);
+
+            if(g!=null){
+                g.SetActive(false);
+            }
         }
     }
 
-    public void EditCount(int count2){
-        //Debug.Log(item.Objname + ", " + count2 + ", " + StackMeshes.Count() );
-        count = count2;
-        if (StackMeshes.Count() <= 0){
-            //Debug.Log("Do nothing!");
-        }
-        else if(count >= StackMeshes.Count()){
-            //Debug.Log("Maxing out Stack!");
-            DisableAllMeshes();
-            StackMeshes[StackMeshes.Count()-1].SetActive(true);
-        }
-        else if(StackMeshes[count - 1] != null){
-            //Debug.Log("Updating Stack Model!");
-            DisableAllMeshes();
-            StackMeshes[count].SetActive(true);
+    public void EditCount(int count2, string name, bool block){
+        if(!block){
+            Debug.Log(item.Objname + " (" + this.gameObject.name +") now has " + count2 + ", took from " + name);
+            count = count2;
+            if (StackMeshes.Count() <= 0){
+                Debug.Log("Do nothing!");
+            }
+            else if(count >= StackMeshes.Count()){
+                Debug.Log("Maxing out Stack!");
+                DisableAllMeshes();
+                StackMeshes[StackMeshes.Count()-1].SetActive(true);
+            }
+            else if(StackMeshes[count - 1] != null){
+                Debug.Log("Updating Stack Model!");
+                DisableAllMeshes();
+                StackMeshes[count - 1].SetActive(true);
+            }
         }
     }
 }
