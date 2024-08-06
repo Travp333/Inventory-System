@@ -7,6 +7,8 @@ public class pickUpableItem : MonoBehaviour
 // This has become too specific to coins, need to make more generic!
 {
     [SerializeField]
+    public List<GameObject> possibleMergeList = new List<GameObject>();
+    [SerializeField]
     public Item item;
     [SerializeField]
     public int count = 1;
@@ -21,23 +23,21 @@ public class pickUpableItem : MonoBehaviour
         }
     }
 
-    public void EditCount(int count2, string name, bool block){
-        if(!block){
-            Debug.Log(item.Objname + " (" + this.gameObject.name +") now has " + count2 + ", took from " + name);
-            count = count2;
-            if (StackMeshes.Count() <= 0){
-                Debug.Log("Do nothing!");
-            }
-            else if(count >= StackMeshes.Count()){
-                Debug.Log("Maxing out Stack!");
-                DisableAllMeshes();
-                StackMeshes[StackMeshes.Count()-1].SetActive(true);
-            }
-            else if(StackMeshes[count - 1] != null){
-                Debug.Log("Updating Stack Model!");
-                DisableAllMeshes();
-                StackMeshes[count - 1].SetActive(true);
-            }
+    public void EditCount(int count2, string name){
+        Debug.Log(item.Objname + " (" + this.gameObject.name +") now has " + count2 + ", took from " + name);
+        count = count2;
+        if (StackMeshes.Count() <= 0){
+            //Debug.Log("Do nothing!");
+        }
+        else if(count >= StackMeshes.Count()){
+            //Debug.Log("Maxing out Stack!");
+            DisableAllMeshes();
+            StackMeshes[StackMeshes.Count()-1].SetActive(true);
+        }
+        else if(StackMeshes[count - 1] != null){
+            //Debug.Log("Updating Stack Model!");
+            DisableAllMeshes();
+            StackMeshes[count - 1].SetActive(true);
         }
     }
 }
