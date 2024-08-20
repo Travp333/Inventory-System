@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 public class ItemStackChecker : MonoBehaviour
 {
-    //add blocker bacl??? still not working 
     int count;
     
+    public void StopCR(){
+        StopAllCoroutines();
+    }
     IEnumerator DelayedDelete(Collider other, pickUpableItem pickUp, pickUpableItem otherPickUp)
     {
-        yield return new WaitForSeconds(Random.Range(0, .5f));
+        yield return new WaitForSeconds(Random.Range(.1f, .3f));
         if(other != null){
             if(otherPickUp != null){
                 count = otherPickUp.count;
                 if(pickUp.count + count <= pickUp.item.stackSize){
-                    Destroy(other.transform.parent.gameObject);
-                    pickUp.EditCount(pickUp.count + count, otherPickUp.gameObject.name);
-                    Debug.Log("Deleted Valid other object (" + otherPickUp.gameObject.name + ") now have " + pickUp.count + " " + pickUp.item.name, transform.parent.gameObject);
+                    if(!pickUp.block){
+                        Destroy(other.transform.parent.gameObject);
+                        otherPickUp.block = true;
+                        other.gameObject.GetComponentInChildren<ItemStackChecker>().StopCR();
+                        pickUp.EditCount(pickUp.count + count, otherPickUp.gameObject.name);
+                        Debug.Log("Deleted Valid other object (" + otherPickUp.gameObject.name + ") now have " + pickUp.count + " " + pickUp.item.name, transform.parent.gameObject);
+                    }
                 }
 
             }
@@ -36,7 +42,9 @@ public class ItemStackChecker : MonoBehaviour
             if(otherPickUp.item.name == pickUp.item.name){
                 //Debug.Log("Collision with " + count + " of same item " + pickUp.item, transform.parent.gameObject);
                 if(other.transform.parent.gameObject != null){
-                    StartCoroutine(DelayedDelete(other, pickUp, otherPickUp));
+                    if(!pickUp.block){
+                        
+                    }
                 }
             }
         }

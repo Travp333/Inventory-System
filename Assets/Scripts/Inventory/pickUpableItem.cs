@@ -6,8 +6,8 @@ using UnityEngine;
 public class pickUpableItem : MonoBehaviour
 // This has become too specific to coins, need to make more generic!
 {
-    [SerializeField]
-    public List<GameObject> possibleMergeList = new List<GameObject>();
+    public bool block;
+
     [SerializeField]
     public Item item;
     [SerializeField]
@@ -16,7 +16,6 @@ public class pickUpableItem : MonoBehaviour
     public GameObject[] StackMeshes;
     public void DisableAllMeshes(){
         foreach (GameObject g in StackMeshes){
-
             if(g!=null){
                 g.SetActive(false);
             }
