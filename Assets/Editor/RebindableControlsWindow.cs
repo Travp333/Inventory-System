@@ -5,7 +5,15 @@ using UnityEditor;
 
 public class RebindableControlsWindow : EditorWindow
 {
-    bool showPosition = false;
+    bool showWalkForward = false;
+    bool showWalkBackward = false;
+    bool showWalkLeft = false;
+    bool showWalkRight = false;
+    bool showJump = false;
+    bool showCrouch = false;
+    bool showFire = false;
+    bool showReload = false;
+    bool showOpenInventory = false;
     string walkForwardCurrent = "W";
     string walkBackwardCurrent = "S";
     string walkLeftCurrent = "A";
@@ -15,83 +23,153 @@ public class RebindableControlsWindow : EditorWindow
     string fireCurrent = "Left Click";
     string reloadCurrent = "R";
     string openInventoryCurrent = "Tab";
-    string walkForwardNew = "W";
-    string walkBackwardNew = "S";
-    string walkLeftNew = "A";
-    string walkRightNew = "D";
-    string jumpNew = "Space";
-    string crouchNew = "Ctrl";
-    string fireNew = "Left Click";
-    string reloadNew = "R";
-    string openInventoryNew = "Tab";
+    string walkForwardNew = "null";
+    string walkBackwardNew = "null";
+    string walkLeftNew = "null";
+    string walkRightNew = "null";
+    string jumpNew = "null";
+    string crouchNew = "null";
+    string fireNew = "null";
+    string reloadNew = "null";
+    string openInventoryNew = "null";
 
     [MenuItem("Tools/RebindableControls")]
     public static void ShowRebindableControls(){
         GetWindow<RebindableControlsWindow>("RebindableControlsWindow");
     }
+    //MAKE THIS A BOOL METHOD THAT DOES INPUT VALIDATION AND RETURNS TRUE OR FALSE
+    private void UpdateBinding(string binding1, string binding2){
+        //add input validation
+        Debug.Log("Setting " + binding1 + " to " + binding2);
+        binding1 = binding2;
+    }
+    //THIS IS BUGGED!!!!!
+    //Cant do it in a method like this for some reason, need to copy+paste
+    private void CreateBody(string newBind, string currentBind){
+        //Beginning of horizontal group, containing one row for one keybind
+        EditorGUILayout.BeginHorizontal();
+        //Editing spacing
+        EditorGUIUtility.labelWidth = 1;
+            //Beginning of vertical group, allowing vertical stacking within horizontal groups. This way I can have a title above the interactable bit
+            //This group covers the "New" row which lets the user edit the keybind
+            EditorGUILayout.BeginVertical();
+                //Title for this vertical group
+                EditorGUILayout.LabelField("New", EditorStyles.boldLabel, GUILayout.ExpandWidth(false));
+                //Actual content, editable text box to allow controls to be changed in the editor 
+                newBind = GUILayout.TextField(newBind, 10, GUILayout.ExpandWidth(false));
+            //End of current vertical group    
+            EditorGUILayout.EndVertical();
+            //Beginning of new vertical group, this one contains the button that chacks if the user's input was valid
+            EditorGUILayout.BeginVertical();
+                //Title for vertical group
+                EditorGUILayout.LabelField("Update Binding", EditorStyles.boldLabel);
+                //Button that calls a different method when pressed
+                if(GUILayout.Button("Update", GUILayout.ExpandWidth(false))){
+                    //this method will compare and see if the users input was valid, and if so it will update the binding.
+                    UpdateBinding(currentBind, newBind);
+                }
+            //end of the vertical group
+            EditorGUILayout.EndVertical();
+            //beginning of another vertical group
+            EditorGUILayout.BeginVertical();
+                //Title for vertical group
+                EditorGUILayout.LabelField("Current", EditorStyles.boldLabel);
+                //box simply displaying the current active keybind
+                GUILayout.Box(currentBind);
+            //end of vertical group
+            EditorGUILayout.EndVertical();
+        // end of horizontal group
+        EditorGUILayout.EndHorizontal();
+    }
+
     void OnGUI()
     {
         
-        //do a "new" and "current" optioin with an update button that updates the current one,, you can do data validation here
-        
+        //Title 
         GUILayout.Label("Rebindable Controls", EditorStyles.boldLabel);
+        // Title for current Binding and beginning of dropdown menu
+        showWalkForward = EditorGUILayout.Foldout(showWalkForward, "Walk Forward");
+        // bool deciding if we are showing the dropdown or not
+        if(showWalkForward){
+            //Method handling the creation of the body of this menu
+            CreateBody(walkForwardNew, walkForwardCurrent);
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
 
-        showPosition = EditorGUILayout.Foldout(showPosition, "Walk Forward");
-        if(showPosition){
-
+        showWalkBackward = EditorGUILayout.Foldout(showWalkBackward, "Walk Backward");
+        if(showWalkBackward){
+            //Beginning of horizontal group, containing one row for one keybind
             EditorGUILayout.BeginHorizontal();
-            //GUILayout.FlexibleSpace();
+            //Editing spacing
             EditorGUIUtility.labelWidth = 1;
+                //Beginning of vertical group, allowing vertical stacking within horizontal groups. This way I can have a title above the interactable bit
+                //This group covers the "New" row which lets the user edit the keybind
                 EditorGUILayout.BeginVertical();
+                    //Title for this vertical group
                     EditorGUILayout.LabelField("New", EditorStyles.boldLabel, GUILayout.ExpandWidth(false));
-                    walkForwardNew = GUILayout.TextField(walkForwardNew, 25, GUILayout.ExpandWidth(false));
+                    //Actual content, editable text box to allow controls to be changed in the editor 
+                    walkBackwardNew = GUILayout.TextField(walkBackwardNew, 10, GUILayout.ExpandWidth(false));
+                //End of current vertical group    
                 EditorGUILayout.EndVertical();
-
+                //Beginning of new vertical group, this one contains the button that chacks if the user's input was valid
                 EditorGUILayout.BeginVertical();
+                    //Title for vertical group
                     EditorGUILayout.LabelField("Update Binding", EditorStyles.boldLabel);
+                    //Button that calls a different method when pressed
                     if(GUILayout.Button("Update", GUILayout.ExpandWidth(false))){
-                        //ADD INPUT VALIDATION HERE
-                        walkForwardCurrent = walkForwardNew;
+                        //this method will compare and see if the users input was valid, and if so it will update the binding.
+                        walkBackwardCurrent = walkBackwardNew;
                     }
+                //end of the vertical group
                 EditorGUILayout.EndVertical();
-
+                //beginning of another vertical group
                 EditorGUILayout.BeginVertical();
+                    //Title for vertical group
                     EditorGUILayout.LabelField("Current", EditorStyles.boldLabel);
-                    GUILayout.Box(walkForwardCurrent);
+                    //box simply displaying the current active keybind
+                    GUILayout.Box(walkBackwardCurrent);
+                //end of vertical group
                 EditorGUILayout.EndVertical();
+            // end of horizontal group
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndFoldoutHeaderGroup();
 
-        //GUILayout.Space(5);
-       // GUILayout.Box("Walk Backward", EditorStyles.boldLabel);
-        //walkBackward = GUILayout.TextField(walkBackward, 25);
-        //GUILayout.Space(20);
-        //GUILayout.Box("Walk Left", EditorStyles.boldLabel);
-       // walkLeft = GUILayout.TextField(walkLeft, 25);
-        //GUILayout.Space(20);
-      //  GUILayout.Box("Walk Right", EditorStyles.boldLabel);
-      //  walkRight = GUILayout.TextField(walkRight, 25);
-       // GUILayout.Space(20);
-     //   GUILayout.Box("Jump", EditorStyles.boldLabel);
-      //  jump = GUILayout.TextField(jump, 25);
-       // GUILayout.Space(20);
-      //  GUILayout.Box("Crouch", EditorStyles.boldLabel);
-     //   crouch = GUILayout.TextField(crouch, 25);
-       // GUILayout.Space(20);
-     //   GUILayout.Box("Fire", EditorStyles.boldLabel);
-     //   fire = GUILayout.TextField(fire, 25);
-       // GUILayout.Space(20);
-     //   GUILayout.Box("Reload", EditorStyles.boldLabel);
-     //   reload = GUILayout.TextField(reload, 25);
-      //  GUILayout.Space(20);
-      //  GUILayout.Box("Open Inventory", EditorStyles.boldLabel);
-      //  openInventory = GUILayout.TextField(openInventory, 25);
-        
-      //  if(GUILayout.Button("Change Binding?")){
-      //      Debug.Log("Change binging?");
-      //  }
-        //GUILayout.EndArea();
+        showWalkLeft = EditorGUILayout.Foldout(showWalkLeft, "Walk Left");
+        if(showWalkLeft){
+            CreateBody(walkLeftNew, walkLeftCurrent);
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+
+        showWalkRight = EditorGUILayout.Foldout(showWalkRight, "Walk Right");
+        if(showWalkRight){
+            CreateBody(walkRightNew, walkRightCurrent);
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+
+        showJump = EditorGUILayout.Foldout(showJump, "Jump");
+        if(showJump){
+            CreateBody(jumpNew, jumpCurrent);
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+
+        showCrouch = EditorGUILayout.Foldout(showCrouch, "Crouch");
+        if(showCrouch){
+            CreateBody(crouchNew, crouchCurrent);
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+
+        showReload = EditorGUILayout.Foldout(showReload, "Reload");
+        if(showReload){
+            CreateBody(reloadNew, reloadCurrent);
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+
+        showFire = EditorGUILayout.Foldout(showFire, "Fire");
+        if(showFire){
+            CreateBody(fireNew, fireCurrent);
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
     }
 
 }
