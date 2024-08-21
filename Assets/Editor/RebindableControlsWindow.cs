@@ -31,6 +31,7 @@ public class RebindableControlsWindow : EditorWindow
     }
     void OnGUI()
     {
+        
         //do a "new" and "current" optioin with an update button that updates the current one,, you can do data validation here
         
         GUILayout.Label("Rebindable Controls", EditorStyles.boldLabel);
@@ -39,15 +40,16 @@ public class RebindableControlsWindow : EditorWindow
         if(showPosition){
 
             EditorGUILayout.BeginHorizontal();
-
+            //GUILayout.FlexibleSpace();
+            EditorGUIUtility.labelWidth = 1;
                 EditorGUILayout.BeginVertical();
-                    EditorGUILayout.LabelField("New", EditorStyles.boldLabel);
-                    walkForwardNew = GUILayout.TextField(walkForwardNew, 25);
+                    EditorGUILayout.LabelField("New", EditorStyles.boldLabel, GUILayout.ExpandWidth(false));
+                    walkForwardNew = GUILayout.TextField(walkForwardNew, 25, GUILayout.ExpandWidth(false));
                 EditorGUILayout.EndVertical();
 
                 EditorGUILayout.BeginVertical();
                     EditorGUILayout.LabelField("Update Binding", EditorStyles.boldLabel);
-                    if(GUILayout.Button("Update")){
+                    if(GUILayout.Button("Update", GUILayout.ExpandWidth(false))){
                         //ADD INPUT VALIDATION HERE
                         walkForwardCurrent = walkForwardNew;
                     }
