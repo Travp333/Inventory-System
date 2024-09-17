@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 772310826bc0b98418795da99cc607e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  block: 0
   item: {fileID: 11400000, guid: c912134061816414ea8e020ef0819fdd, type: 2}
   count: 1
   StackMeshes:
@@ -154,7 +155,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 6831777469397936448}
   - {fileID: 6831777469397936448}
 --- !u!54 &5672646601700508588
 Rigidbody:

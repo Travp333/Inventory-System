@@ -3,33 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 public class ItemStackChecker : MonoBehaviour
 {
-    int count;
-    
-    public void StopCR(){
-        StopAllCoroutines();
-    }
-    IEnumerator DelayedDelete(Collider other, pickUpableItem pickUp, pickUpableItem otherPickUp)
+    //stackmodels are not updating!
+    int ID;
+    public bool block;
+    private void Start()
     {
-        yield return new WaitForSeconds(Random.Range(.1f, .3f));
-        if(other != null){
-            if(otherPickUp != null){
-                count = otherPickUp.count;
-                if(pickUp.count + count <= pickUp.item.stackSize){
-                    if(!pickUp.block){
-                        Destroy(other.transform.parent.gameObject);
-                        otherPickUp.block = true;
-                        other.gameObject.GetComponentInChildren<ItemStackChecker>().StopCR();
-                        pickUp.EditCount(pickUp.count + count, otherPickUp.gameObject.name);
-                        Debug.Log("Deleted Valid other object (" + otherPickUp.gameObject.name + ") now have " + pickUp.count + " " + pickUp.item.name, transform.parent.gameObject);
-                    }
-                }
-
-            }
-        }
+        ID = GetInstanceID();
     }
-    //DOESNT WORK WHEN YOU TRY TO PICK UP AN ITEM WITH A FULL INVENTORY AND IT DROPS BACK ON THE GROUND
     private void OnTriggerEnter(Collider other)
     {
+        
         //Debug.Log("CollisioN!");
         //is this a valid object?
         if(other.GetComponent<ItemStackChecker>()!= null){
@@ -40,13 +23,30 @@ public class ItemStackChecker : MonoBehaviour
             otherPickUp = other.transform.parent.gameObject.GetComponent<pickUpableItem>();
             pickUp = transform.parent.gameObject.GetComponent<pickUpableItem>();
             if(otherPickUp.item.name == pickUp.item.name){
-                //Debug.Log("Collision with " + count + " of same item " + pickUp.item, transform.parent.gameObject);
+                Debug.Log("Collision with " + otherPickUp.count + " of same item " + pickUp.item + ", " + this.transform.parent.gameObject.name + ", " + other.transform.parent.gameObject.name, transform.parent.gameObject );
+                //if yes, delete the "other" one
                 if(other.transform.parent.gameObject != null){
-                    if(!pickUp.block){
-                        
+                    if(pickUp.count + otherPickUp.count <= pickUp.item.stackSize){
+                        if(!block){
+                            other.GetComponent<ItemStackChecker>().block = true;
+                            pickUp.count += otherPickUp.count;
+                            Destroy(other.transform.parent.gameObject);
+                            otherPickUp.count = 0;
+                            Debug.Log("Deleted Valid other object, now have " + pickUp.count + ", " + pickUp.item.name + " in " + this.transform.parent.gameObject.name, transform.parent.gameObject );
+                        }
+                        else{
+                            Debug.Log("BLOCKED");
+                        }
+                    }
+                    else if (pickUp.count < pickUp.item.stackSize && otherPickUp.count < otherPickUp.item.stackSize){
+                        otherPickUp.count = (pickUp.count + otherPickUp.count) - pickUp.item.stackSize;
+                        pickUp.count = pickUp.item.stackSize;
+                        //Add some logic here to stack remainders, ie 80 + 70 is too much for a 99 max, so create one stack of 99 and one stack of 51
+
                     }
                 }
             }
         }
     }
+
 }
