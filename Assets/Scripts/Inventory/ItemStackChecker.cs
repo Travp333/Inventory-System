@@ -32,6 +32,7 @@ public class ItemStackChecker : MonoBehaviour
                             pickUp.count += otherPickUp.count;
                             Destroy(other.transform.parent.gameObject);
                             otherPickUp.count = 0;
+                            pickUp.EditCount(pickUp.count, pickUp.item.name);
                             Debug.Log("Deleted Valid other object, now have " + pickUp.count + ", " + pickUp.item.name + " in " + this.transform.parent.gameObject.name, transform.parent.gameObject );
                         }
                         else{
@@ -41,6 +42,7 @@ public class ItemStackChecker : MonoBehaviour
                     else if (pickUp.count < pickUp.item.stackSize && otherPickUp.count < otherPickUp.item.stackSize){
                         otherPickUp.count = (pickUp.count + otherPickUp.count) - pickUp.item.stackSize;
                         pickUp.count = pickUp.item.stackSize;
+                        pickUp.EditCount(pickUp.count, pickUp.item.name);
                         //Add some logic here to stack remainders, ie 80 + 70 is too much for a 99 max, so create one stack of 99 and one stack of 51
 
                     }

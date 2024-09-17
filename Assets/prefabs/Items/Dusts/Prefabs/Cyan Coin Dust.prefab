@@ -58,7 +58,6 @@ MonoBehaviour:
   count: 1
   StackMeshes:
   - {fileID: 8628721861695867446}
-  - {fileID: 8628721861695867446}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -155,8 +154,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 6831777469397936448}
-  - {fileID: 6831777469397936448}
+  - {fileID: 0}
 --- !u!54 &5672646601700508588
 Rigidbody:
   m_ObjectHideFlags: 0
