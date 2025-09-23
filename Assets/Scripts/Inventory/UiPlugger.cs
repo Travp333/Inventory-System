@@ -30,6 +30,7 @@ public class UiPlugger : MonoBehaviour
 	int vPadding = 100;
 	//creates buttons for storage devices
 	public void SpawnButtonsStorage(){
+		Debug.Log("TEST!!!!");
 		//iterating through columns
 		for (int i = 0; i < inven.vSize; i++)
 		{
